@@ -65,23 +65,23 @@ const Sidebar: React.FC<SidebarProps> = ({
     <aside className="sidebar-area">
       <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', height: '100%' }}>
         <h2
-          className="headline-lg"
+          className="headline-lg animate-float-up delay-100"
           style={{ fontSize: '28px', lineHeight: 1, marginBottom: '8px' }}
         >
           yochiyochi
         </h2>
         <p
-          className="label-lg"
-          style={{ color: 'var(--neutral)', opacity: 0.7, marginBottom: '24px' }}
+          className="label-lg animate-float-up delay-100"
+          style={{ color: 'var(--neutral)', opacity: 0.7, marginBottom: '24px', paddingLeft: '24px' }}
         >
           {t('learningPanel', uiLanguage)}
         </p>
 
         {/* ── 문자 종류 (SCRIPT) ── */}
-        <p className="label-lg" style={{ marginBottom: '8px', paddingLeft: '24px' }}>
+        <p className="label-lg animate-float-up delay-200" style={{ marginBottom: '8px', paddingLeft: '24px' }}>
           {t('scriptType', uiLanguage)}
         </p>
-        <div className="segmented-control">
+        <div className="segmented-control animate-float-up delay-200">
           {[
             { id: 'hiragana', label: t('hiragana', uiLanguage) },
             { id: 'katakana', label: t('katakana', uiLanguage) },
@@ -98,11 +98,11 @@ const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* ── 학습 범위 (RANGE) ── */}
-        <p className="label-lg" style={{ marginBottom: '8px', paddingLeft: '24px' }}>
+        <p className="label-lg animate-float-up delay-300" style={{ marginBottom: '8px', paddingLeft: '24px' }}>
           {t('range', uiLanguage)}
         </p>
         <div
-          className="card"
+          className="card animate-float-up delay-300"
           style={{ padding: '8px 24px', marginBottom: '24px' }}
         >
           <ToggleRow label={t('seion', uiLanguage)} checked={useSeion} onChange={setUseSeion} />
@@ -113,11 +113,11 @@ const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* ── 표시 옵션 (DISPLAY) ── */}
-        <p className="label-lg" style={{ marginBottom: '8px', paddingLeft: '24px' }}>
+        <p className="label-lg animate-float-up delay-400" style={{ marginBottom: '8px', paddingLeft: '24px' }}>
           {t('displayOptions', uiLanguage)}
         </p>
         <div
-          className="card"
+          className="card animate-float-up delay-400"
           style={{ padding: '8px 24px', marginBottom: '24px' }}
         >
           <ToggleRow label={t('showRomaji', uiLanguage)} checked={showRomaji} onChange={setShowRomaji} />
@@ -125,7 +125,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* TIP */}
-        <div style={{ marginTop: 'auto' }}>
+        <div className="animate-float-up delay-500" style={{ marginTop: 'auto' }}>
           <p style={{ fontSize: '13px', opacity: 0.5, fontStyle: 'italic', lineHeight: 1.6 }}>
             {t('sidebarTip', uiLanguage)}
           </p>

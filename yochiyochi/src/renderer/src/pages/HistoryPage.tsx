@@ -39,6 +39,7 @@ const HistoryPage: React.FC<HistoryPageProps> = ({ history, onClear, onSelect, u
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
       {/* Header */}
       <div
+        className="animate-float-up delay-100"
         style={{
           padding: '24px 32px',
           borderBottom: '1px solid var(--border-light)',
@@ -85,6 +86,7 @@ const HistoryPage: React.FC<HistoryPageProps> = ({ history, onClear, onSelect, u
       <div style={{ flex: 1, overflow: 'auto', padding: '24px 32px' }}>
         {history.length === 0 ? (
           <div
+            className="animate-float-up delay-200"
             style={{
               display: 'flex',
               flexDirection: 'column',
@@ -109,7 +111,7 @@ const HistoryPage: React.FC<HistoryPageProps> = ({ history, onClear, onSelect, u
             {[...history].reverse().map((entry, idx) => (
               <button
                 key={idx}
-                className="card"
+                className="card animate-float-up"
                 onClick={() => onSelect(entry)}
                 style={{
                   cursor: 'pointer',
@@ -119,7 +121,8 @@ const HistoryPage: React.FC<HistoryPageProps> = ({ history, onClear, onSelect, u
                   padding: '16px 8px',
                   transition: 'border-color 0.2s',
                   border: '1px solid var(--border-light)',
-                  background: 'var(--surface)'
+                  background: 'var(--surface)',
+                  animationDelay: `${Math.min(idx * 15, 300)}ms`
                 }}
                 onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'var(--primary)')}
                 onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--border-light)')}

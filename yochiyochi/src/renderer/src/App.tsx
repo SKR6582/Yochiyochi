@@ -125,6 +125,29 @@ function App(): React.JSX.Element {
     handleDraw()
   }, [handleDraw])
 
+  // ── 스마트 단축키 리스너 (교사용 무선 핫키) ──
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const activeEl = document.activeElement
+      if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) {
+        return
+      }
+
+      if (e.code === 'Space') {
+        e.preventDefault()
+        handleDraw()
+      }
+      if (e.key === 'r' || e.key === 'R') {
+        handleDraw()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [handleDraw])
+
   // 기록에서 글자 선택 → Lessons 탭으로 이동하여 표시
   const handleSelectFromHistory = (entry: { char: string; romaji: string; type: string }) => {
     setCharacter(entry)
@@ -157,7 +180,7 @@ function App(): React.JSX.Element {
               errorMessage={errorMessage}
               showRomaji={showRomaji}
               uiLanguage={uiLanguage}
-              historyCount={history.length}
+              recentHistory={history.slice(-5).reverse()}
             />
             <Sidebar
               uiLanguage={uiLanguage}

@@ -119,32 +119,83 @@ const NumberDrawPage: React.FC<{ uiLanguage: UiLanguage }> = ({ uiLanguage }) =>
     return <span style={{ fontSize: '24px', fontWeight: 800 }}>{t('drawBtn', uiLanguage)}</span>
   }
 
+  const displayVal = result !== null ? String(result) : '?'
+  const fontSz = displayVal.length >= 3 ? '160px' : displayVal.length >= 2 ? '220px' : '340px'
+  const lineHt = displayVal.length >= 3 ? '310px' : displayVal.length >= 2 ? '310px' : '310px'
+
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
       <div style={{ flex: 1, display: 'flex' }}>
         {/* Main Area */}
         <div className="canvas-area" style={{ flex: 1 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <p className="label-lg" style={{ marginBottom: '8px', opacity: 0.5 }}>
+          <div
+            key={result !== null ? result : 'empty'}
+            className="animate-float-up delay-100"
+            style={{
+              width: '460px',
+              height: '460px',
+              borderRadius: '32px',
+              backgroundColor: '#ECEEF2',
+              boxShadow: '-10px -10px 20px rgba(255, 255, 255, 0.8), 10px 10px 20px rgba(0, 0, 0, 0.12)',
+              border: '1px solid rgba(255, 255, 255, 0.5)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative'
+            }}
+          >
+            {/* 타이틀 레이블 (카드 내부 상단 배치 - 32px 울트라 볼드) */}
+            <p
+              className="label-lg"
+              style={{
+                position: 'absolute',
+                top: '56px',
+                color: 'var(--primary)',
+                fontWeight: 900,
+                fontSize: '26px',
+                letterSpacing: '0.05em',
+                marginBottom: 0
+              }}
+            >
               {t('randomNumber', uiLanguage)}
             </p>
-            <p style={{ fontSize: '14px', opacity: 0.4, marginBottom: '24px' }}>
+            
+            {/* 보조 프리셋 정보 텍스트 (타이틀 아래 배치) */}
+            <p
+              style={{
+                position: 'absolute',
+                top: '96px',
+                fontSize: '13px',
+                fontWeight: 600,
+                color: 'var(--neutral)',
+                opacity: 0.45,
+                letterSpacing: '-0.02em',
+                marginBottom: 0
+              }}
+            >
               {activePreset.name} · {activePreset.min}~{activePreset.max}{t('numberUnit', uiLanguage)}
               {activePreset.excluded ? ` (${t('excluded', uiLanguage)}: ${activePreset.excluded})` : ''}
             </p>
+
             <div
               className="display-xl"
               style={{
-                marginBottom: '40px',
                 transition: isGlowing ? 'all 0.3s ease-out' : 'transform 0.1s',
-                transform: isAnimating ? 'scale(1.05)' : isGlowing ? 'scale(1.1)' : 'scale(1)',
+                transform: isAnimating 
+                  ? 'translateY(36px) scale(1.05)' 
+                  : isGlowing 
+                    ? 'translateY(36px) scale(1.1)' 
+                    : 'translateY(36px) scale(1)',
                 color: isGlowing ? 'var(--primary)' : 'var(--neutral)',
                 textShadow: isGlowing
-                  ? '0 0 20px rgba(59,130,246,0.6), 0 0 60px rgba(59,130,246,0.3), 0 0 100px rgba(59,130,246,0.15)'
-                  : 'none'
+                  ? '0 0 20px rgba(59,130,246,0.5), 0 0 50px rgba(59,130,246,0.25)'
+                  : 'none',
+                fontSize: fontSz,
+                lineHeight: lineHt
               }}
             >
-              {result !== null ? result : '?'}
+              {displayVal}
             </div>
           </div>
         </div>
@@ -153,13 +204,13 @@ const NumberDrawPage: React.FC<{ uiLanguage: UiLanguage }> = ({ uiLanguage }) =>
         <aside className="sidebar-area">
           <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', height: '100%' }}>
             <h2
-              className="headline-lg"
+              className="headline-lg animate-float-up delay-150"
               style={{ fontSize: '28px', lineHeight: 1, marginBottom: '8px' }}
             >
               {t('presets', uiLanguage)}
             </h2>
             <p
-              className="label-lg"
+              className="label-lg animate-float-up delay-150"
               style={{ opacity: 0.5, marginBottom: '24px' }}
             >
               {t('classSettings', uiLanguage)}
@@ -167,6 +218,7 @@ const NumberDrawPage: React.FC<{ uiLanguage: UiLanguage }> = ({ uiLanguage }) =>
 
             {/* Preset Tabs */}
             <div
+              className="animate-float-up delay-250"
               style={{
                 display: 'flex',
                 gap: '8px',
@@ -213,7 +265,7 @@ const NumberDrawPage: React.FC<{ uiLanguage: UiLanguage }> = ({ uiLanguage }) =>
             </div>
 
             {/* Active Preset Settings */}
-            <div className="card" style={{ padding: '16px', marginBottom: '16px' }}>
+            <div className="card animate-float-up delay-350" style={{ padding: '16px', marginBottom: '16px' }}>
               <div style={{ marginBottom: '16px' }}>
                 <label className="label-lg" style={{ fontSize: '11px', marginBottom: '6px', display: 'block' }}>
                   {t('presetName', uiLanguage)}
@@ -267,6 +319,7 @@ const NumberDrawPage: React.FC<{ uiLanguage: UiLanguage }> = ({ uiLanguage }) =>
 
             {presets.length > 1 && (
               <button
+                className="animate-float-up delay-350"
                 onClick={() => deletePreset(activePresetIndex)}
                 style={{
                   background: 'transparent',
@@ -293,7 +346,7 @@ const NumberDrawPage: React.FC<{ uiLanguage: UiLanguage }> = ({ uiLanguage }) =>
               </button>
             )}
 
-            <div style={{ marginTop: 'auto' }}>
+            <div className="animate-float-up delay-500" style={{ marginTop: 'auto' }}>
               <p style={{ fontSize: '13px', opacity: 0.5, fontStyle: 'italic', lineHeight: 1.6 }}>
                 {t('presetTip', uiLanguage)}
               </p>
@@ -305,7 +358,7 @@ const NumberDrawPage: React.FC<{ uiLanguage: UiLanguage }> = ({ uiLanguage }) =>
       {/* Draw Button */}
       <footer className="bottom-bar">
         <button
-          className="btn-primary"
+          className="btn-primary animate-float-up delay-300"
           style={{ flex: 1, height: '80px' }}
           onClick={handleDraw}
           disabled={isAnimating}

@@ -22,7 +22,7 @@ const BottomBar: React.FC<BottomBarProps> = ({ onDraw, uiLanguage }) => {
 
   return (
     <footer className="bottom-bar">
-      <button className="btn-primary" style={{ flex: 1, height: '80px' }} onClick={onDraw}>
+      <button className="btn-primary animate-float-up delay-300" style={{ flex: 1, height: '80px' }} onClick={onDraw}>
         {renderButtonText()}
       </button>
     </footer>

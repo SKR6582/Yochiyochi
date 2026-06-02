@@ -72,8 +72,15 @@ const CardListPage: React.FC<CardListPageProps> = ({ onSelect, uiLanguage }) => 
     <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
       {/* Card Grid */}
       <div style={{ flex: 1, overflow: 'auto', padding: '24px 32px' }}>
-        {sections.map((section) => (
-          <div key={section.type} style={{ marginBottom: '32px' }}>
+        {sections.map((section, sIdx) => (
+          <div
+            key={section.type}
+            className="animate-float-up"
+            style={{
+              marginBottom: '32px',
+              animationDelay: `${sIdx * 50 + 50}ms`
+            }}
+          >
             <h3 className="label-lg" style={{ marginBottom: '12px' }}>
               {section.title}
             </h3>
@@ -128,6 +135,7 @@ const CardListPage: React.FC<CardListPageProps> = ({ onSelect, uiLanguage }) => 
       {/* Preview Panel */}
       {selected && (
         <div
+          className="animate-float-up delay-200"
           style={{
             width: '320px',
             borderLeft: '1px solid var(--border-light)',

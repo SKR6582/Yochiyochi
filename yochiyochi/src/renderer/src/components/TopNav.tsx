@@ -32,14 +32,7 @@ const TopNav: React.FC<TopNavProps> = ({ currentPage, setCurrentPage, onOpenSett
                 e.preventDefault()
                 setCurrentPage(tab.id)
               }}
-              style={{
-                color: currentPage === tab.id ? 'var(--primary)' : 'var(--neutral)',
-                fontWeight: currentPage === tab.id ? 700 : 600,
-                textDecoration: 'none',
-                borderBottom: currentPage === tab.id ? '2px solid var(--primary)' : '2px solid transparent',
-                paddingBottom: '4px',
-                transition: 'all 0.2s'
-              }}
+              className={`nav-tab ${currentPage === tab.id ? 'active' : ''}`}
             >
               {tab.label}
             </a>

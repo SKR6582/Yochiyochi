@@ -157,6 +157,7 @@ function App(): React.JSX.Element {
               errorMessage={errorMessage}
               showRomaji={showRomaji}
               uiLanguage={uiLanguage}
+              historyCount={history.length}
             />
             <Sidebar
               uiLanguage={uiLanguage}

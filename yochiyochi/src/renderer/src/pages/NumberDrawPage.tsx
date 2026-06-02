@@ -107,6 +107,18 @@ const NumberDrawPage: React.FC<{ uiLanguage: UiLanguage }> = ({ uiLanguage }) =>
     runFrame()
   }, [activePreset])
 
+  const renderButtonText = () => {
+    if (uiLanguage === 'ko') {
+      return (
+        <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+          <span style={{ fontSize: '24px', fontWeight: 800 }}>뽑기</span>
+          <span style={{ fontSize: '13px', fontWeight: 500, opacity: 0.5, letterSpacing: '0.05em', transform: 'translateY(1px)' }}>DRAW</span>
+        </span>
+      )
+    }
+    return <span style={{ fontSize: '24px', fontWeight: 800 }}>{t('drawBtn', uiLanguage)}</span>
+  }
+
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
       <div style={{ flex: 1, display: 'flex' }}>
@@ -265,9 +277,18 @@ const NumberDrawPage: React.FC<{ uiLanguage: UiLanguage }> = ({ uiLanguage }) =>
                   fontWeight: 600,
                   cursor: 'pointer',
                   padding: '8px 0',
-                  textAlign: 'left'
+                  textAlign: 'left',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
                 }}
               >
+                <svg
+                  style={{ width: '14px', height: '14px', fill: 'currentColor' }}
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+                </svg>
                 {t('deletePreset', uiLanguage)}
               </button>
             )}
@@ -285,11 +306,11 @@ const NumberDrawPage: React.FC<{ uiLanguage: UiLanguage }> = ({ uiLanguage }) =>
       <footer className="bottom-bar">
         <button
           className="btn-primary"
-          style={{ flex: 1, fontSize: '32px', height: '80px' }}
+          style={{ flex: 1, height: '80px' }}
           onClick={handleDraw}
           disabled={isAnimating}
         >
-          <span style={{ marginRight: '16px' }}>🎲</span> {t('drawBtn', uiLanguage)}
+          {renderButtonText()}
         </button>
       </footer>
     </div>

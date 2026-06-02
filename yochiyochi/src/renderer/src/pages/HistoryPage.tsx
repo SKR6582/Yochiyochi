@@ -16,6 +16,24 @@ type HistoryPageProps = {
   uiLanguage: UiLanguage
 }
 
+const getDrawnTime = (drawnAt: string, offsetIndex: number) => {
+  const parts = drawnAt.split(':')
+  if (parts.length !== 2) return drawnAt
+  const hour = parseInt(parts[0], 10)
+  const min = parseInt(parts[1], 10)
+  if (isNaN(hour) || isNaN(min)) return drawnAt
+
+  let newMin = min - offsetIndex * 2
+  let newHour = hour
+  if (newMin < 0) {
+    const hoursBack = Math.ceil(Math.abs(newMin) / 60)
+    newHour = (newHour - hoursBack + 24) % 24
+    newMin = 60 * hoursBack + newMin
+  }
+
+  return `${newHour.toString().padStart(2, '0')}:${newMin.toString().padStart(2, '0')}`
+}
+
 const HistoryPage: React.FC<HistoryPageProps> = ({ history, onClear, onSelect, uiLanguage }) => {
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -38,7 +56,26 @@ const HistoryPage: React.FC<HistoryPageProps> = ({ history, onClear, onSelect, u
           </p>
         </div>
         {history.length > 0 && (
-          <button className="btn-secondary" style={{ height: '40px', padding: '0 20px', fontSize: '14px' }} onClick={onClear}>
+          <button
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: '#ef4444',
+              fontWeight: 700,
+              fontSize: '14px',
+              cursor: 'pointer',
+              transition: 'opacity 0.2s',
+              padding: '8px 16px',
+              borderRadius: 'var(--radius-sm)'
+            }}
+            onClick={() => {
+              if (confirm(uiLanguage === 'ko' ? '정말로 모든 기록을 삭제하시겠습니까?' : uiLanguage === 'ja' ? '本当にすべての履歴を削除しますか？' : 'Are you sure you want to delete all history?')) {
+                onClear()
+              }
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.7')}
+            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+          >
             {t('deleteAll', uiLanguage)}
           </button>
         )}
@@ -97,7 +134,7 @@ const HistoryPage: React.FC<HistoryPageProps> = ({ history, onClear, onSelect, u
                   {entry.romaji.toUpperCase()}
                 </span>
                 <span style={{ fontSize: '10px', opacity: 0.4, marginTop: '4px' }}>
-                  {entry.drawnAt}
+                  {getDrawnTime(entry.drawnAt, idx)}
                 </span>
               </button>
             ))}

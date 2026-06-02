@@ -7,9 +7,10 @@ type CanvasProps = {
   errorMessage: string | null
   showRomaji: boolean
   uiLanguage: UiLanguage
+  historyCount: number
 }
 
-const Canvas: React.FC<CanvasProps> = ({ character, errorMessage, showRomaji, uiLanguage }) => {
+const Canvas: React.FC<CanvasProps> = ({ character, errorMessage, showRomaji, uiLanguage, historyCount }) => {
   const [animKey, setAnimKey] = useState(0)
 
   useEffect(() => {
@@ -18,7 +19,17 @@ const Canvas: React.FC<CanvasProps> = ({ character, errorMessage, showRomaji, ui
 
   return (
     <main className="canvas-area">
-      <div key={animKey} className="animate-float-up" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div
+        key={animKey}
+        className="animate-float-up"
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative'
+        }}
+      >
         {errorMessage ? (
           <>
             <div
@@ -33,19 +44,23 @@ const Canvas: React.FC<CanvasProps> = ({ character, errorMessage, showRomaji, ui
           </>
         ) : (
           <>
+            {/* 발음 표시 (Absolute 포지션 적용으로 문자가 항상 수직 정중앙에 완벽히 오도록 조절) */}
             {showRomaji && (
               <span
                 style={{
+                  position: 'absolute',
+                  top: '-48px',
                   color: 'var(--primary)',
-                  fontWeight: 700,
-                  fontSize: '18px',
-                  marginBottom: '16px'
+                  fontWeight: 800,
+                  fontSize: '24px',
+                  letterSpacing: '0.05em'
                 }}
               >
                 {character ? character.romaji.toUpperCase() : ''}
               </span>
             )}
-            <div style={{ display: 'flex', alignItems: 'flex-end', marginBottom: '24px' }}>
+
+            <div style={{ display: 'flex', alignItems: 'flex-end', transform: 'translateY(-12px)' }}>
               {character && character.char.length >= 2 ? (
                 <>
                   <span className="display-xl" style={{ fontSize: '320px', lineHeight: '300px' }}>{character.char[0]}</span>

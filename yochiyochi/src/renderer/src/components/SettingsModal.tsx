@@ -41,7 +41,9 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
           maxWidth: '90%',
           display: 'flex',
           flexDirection: 'column',
-          gap: '24px'
+          gap: '24px',
+          borderRadius: 'var(--radius-lg)',
+          border: '1px solid var(--neutral)'
         }}
         onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
       >

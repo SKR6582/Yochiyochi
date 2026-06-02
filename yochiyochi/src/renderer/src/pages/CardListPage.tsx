@@ -53,10 +53,10 @@ const yoon = [
 ]
 
 const getSections = (uiLanguage: UiLanguage) => [
-  { title: `${t('seion', uiLanguage)} (Seion)`, data: seion, type: 'seion' },
-  { title: `${t('dakuon', uiLanguage)} (Dakuon)`, data: dakuon, type: 'dakuon' },
-  { title: `${t('handakuon', uiLanguage)} (Handakuon)`, data: handakuon, type: 'handakuon' },
-  { title: `${t('yoon', uiLanguage)} (Yōon)`, data: yoon, type: 'yoon' }
+  { title: t('seion', uiLanguage), data: seion, type: 'seion' },
+  { title: t('dakuon', uiLanguage), data: dakuon, type: 'dakuon' },
+  { title: t('handakuon', uiLanguage), data: handakuon, type: 'handakuon' },
+  { title: t('yoon', uiLanguage), data: yoon, type: 'yoon' }
 ]
 
 const CardListPage: React.FC<CardListPageProps> = ({ onSelect, uiLanguage }) => {
@@ -152,15 +152,15 @@ const CardListPage: React.FC<CardListPageProps> = ({ onSelect, uiLanguage }) => 
           <div style={{ display: 'flex', alignItems: 'flex-end', marginBottom: '24px' }}>
             {selected.char.length >= 2 ? (
               <>
-                <span style={{ fontSize: '140px', fontWeight: 800, lineHeight: 1 }}>
+                <span style={{ fontSize: '540px', fontWeight: 800, lineHeight: 1 }}>
                   {selected.char[0]}
                 </span>
-                <span style={{ fontSize: '90px', fontWeight: 800, lineHeight: '140px' }}>
+                <span style={{ fontSize: '460px', fontWeight: 800, lineHeight: '240px' }}>
                   {selected.char[1]}
                 </span>
               </>
             ) : (
-              <span style={{ fontSize: '140px', fontWeight: 800, lineHeight: 1 }}>
+              <span style={{ fontSize: '540px', fontWeight: 800, lineHeight: 1 }}>
                 {selected.char}
               </span>
             )}

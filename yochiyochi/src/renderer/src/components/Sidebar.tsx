@@ -31,10 +31,10 @@ const ToggleRow: React.FC<{ label: string; checked: boolean; onChange: (v: boole
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
-      padding: '12px 0'
+      padding: '14px 0'
     }}
   >
-    <span style={{ fontWeight: 600, fontSize: '16px' }}>{label}</span>
+    <span style={{ fontWeight: 600, fontSize: '15px', letterSpacing: '-0.03em' }}>{label}</span>
     <label className="toggle-switch">
       <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} />
       <span className="slider"></span>
@@ -78,18 +78,10 @@ const Sidebar: React.FC<SidebarProps> = ({
         </p>
 
         {/* ── 문자 종류 (SCRIPT) ── */}
-        <p className="label-lg" style={{ marginBottom: '8px' }}>
+        <p className="label-lg" style={{ marginBottom: '8px', paddingLeft: '24px' }}>
           {t('scriptType', uiLanguage)}
         </p>
-        <div
-          style={{
-            display: 'flex',
-            background: 'var(--surface)',
-            border: '1px solid var(--border-light)',
-            padding: '4px',
-            marginBottom: '24px'
-          }}
-        >
+        <div className="segmented-control">
           {[
             { id: 'hiragana', label: t('hiragana', uiLanguage) },
             { id: 'katakana', label: t('katakana', uiLanguage) },
@@ -98,17 +90,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             <button
               key={opt.id}
               onClick={() => setScriptType(opt.id as 'hiragana' | 'katakana' | 'mixed')}
-              style={{
-                flex: 1,
-                border: 'none',
-                background: scriptType === opt.id ? 'var(--primary)' : 'transparent',
-                color: scriptType === opt.id ? '#fff' : 'var(--neutral)',
-                fontWeight: 600,
-                fontSize: '14px',
-                height: '40px',
-                borderRadius: '0',
-                transition: 'all 0.15s'
-              }}
+              className={scriptType === opt.id ? 'active' : ''}
             >
               {opt.label}
             </button>
@@ -116,12 +98,12 @@ const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* ── 학습 범위 (RANGE) ── */}
-        <p className="label-lg" style={{ marginBottom: '8px' }}>
+        <p className="label-lg" style={{ marginBottom: '8px', paddingLeft: '24px' }}>
           {t('range', uiLanguage)}
         </p>
         <div
           className="card"
-          style={{ padding: '4px 16px', marginBottom: '24px' }}
+          style={{ padding: '8px 24px', marginBottom: '24px' }}
         >
           <ToggleRow label={t('seion', uiLanguage)} checked={useSeion} onChange={setUseSeion} />
           <ToggleRow label={t('dakuon', uiLanguage)} checked={useDakuon} onChange={setUseDakuon} />
@@ -131,12 +113,12 @@ const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* ── 표시 옵션 (DISPLAY) ── */}
-        <p className="label-lg" style={{ marginBottom: '8px' }}>
+        <p className="label-lg" style={{ marginBottom: '8px', paddingLeft: '24px' }}>
           {t('displayOptions', uiLanguage)}
         </p>
         <div
           className="card"
-          style={{ padding: '4px 16px', marginBottom: '24px' }}
+          style={{ padding: '8px 24px', marginBottom: '24px' }}
         >
           <ToggleRow label={t('showRomaji', uiLanguage)} checked={showRomaji} onChange={setShowRomaji} />
           <ToggleRow label={t('showExample', uiLanguage)} checked={showExample} onChange={setShowExample} />

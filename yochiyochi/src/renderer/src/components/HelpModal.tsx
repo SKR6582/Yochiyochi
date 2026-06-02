@@ -36,7 +36,9 @@ const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose, uiLanguage }) =>
           flexDirection: 'column',
           gap: '24px',
           maxHeight: '90vh',
-          overflowY: 'auto'
+          overflowY: 'auto',
+          borderRadius: 'var(--radius-lg)',
+          border: '1px solid var(--neutral)'
         }}
         onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
       >

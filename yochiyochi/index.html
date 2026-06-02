@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Styles Showcase</title>
+    <style>
+        /* 기본 reset 및 배경 설정 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .section {
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            color: #86868b;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ----------------------------------
+           1. 모던 미니멀 (클린, 여백 중심)
+        ---------------------------------- */
+        .minimal-container {
+            background-color: #ffffff;
+            padding: 80px 60px;
+            /* 극대화된 여백 */
+            border-radius: 0px;
+            /* 인위적인 곡선을 배제한 직선 구조 */
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .minimal-title {
+            font-size: 28px;
+            font-weight: 400;
+            letter-spacing: -0.5px;
+            line-height: 1.3;
+        }
+
+        .minimal-text {
+            font-size: 15px;
+            color: #6e6e73;
+            line-height: 1.6;
+            max-width: 500px;
+        }
+
+        .minimal-link {
+            font-size: 14px;
+            color: #1d1d1f;
+            text-decoration: none;
+            border-bottom: 1px solid #1d1d1f;
+            width: fit-content;
+            padding-bottom: 2px;
+            transition: opacity 0.2s;
+        }
+
+        .minimal-link:hover {
+            opacity: 0.6;
+        }
+
+
+        /* ----------------------------------
+           2. 에디토리얼 (타이포 강조, 대담한 레이아웃)
+        ---------------------------------- */
+        .editorial-container {
+            background-color: #000000;
+            /* 대비를 극대화하기 위한 블랙 배경 */
+            color: #ffffff;
+            padding: 60px 40px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        @media (min-width: 600px) {
+            .editorial-container {
+                grid-template-columns: 1.5fr 1fr;
+            }
+        }
+
+        .editorial-header {
+            grid-column: 1 / -1;
+        }
+
+        .editorial-tag {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #ff3b30;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .editorial-title {
+            font-size: 56px;
+            /* 압도적인 타이포그래피 크기 */
+            font-weight: 900;
+            line-height: 0.95;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            word-break: break-all;
+        }
+
+        .editorial-meta {
+            font-size: 12px;
+            color: #8e8e93;
+            border-top: 1px solid #333;
+            padding-top: 15px;
+            align-self: end;
+        }
+
+        .editorial-lead {
+            font-size: 18px;
+            line-height: 1.5;
+            color: #e5e5ea;
+            font-weight: 300;
+        }
+
+
+        /* ----------------------------------
+           3. 소프트 UI (뉴모피즘 계열, 부드러운 톤)
+        ---------------------------------- */
+        .soft-container {
+            background-color: #e0e8f0;
+            /* 뉴모피즘을 위한 중간 톤의 배경색 */
+            padding: 60px;
+            border-radius: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        /* 그림자로 입체감을 형성하는 소프트 카드 */
+        .soft-card {
+            background: #e0e8f0;
+            border-radius: 24px;
+            padding: 30px;
+            width: 240px;
+            /* 밝은 하이라이트와 어두운 그림자의 조합 */
+            box-shadow: 9px 9px 16px #be797933,
+                -9px -9px 16px rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* 뉴모피즘을 수정한 음각/양각 형태의 부드러운 버튼 */
+        .soft-button {
+            border: none;
+            outline: none;
+            background: #e0e8f0;
+            padding: 16px 24px;
+            border-radius: 16px;
+            font-weight: 600;
+            color: #4a5568;
+            cursor: pointer;
+            box-shadow: 6px 6px 12px #b8c4d0,
+                -6px -6px 12px rgba(255, 255, 255, 0.8);
+            transition: all 0.2s ease;
+        }
+
+        .soft-button:active {
+            /* 클릭 시 들어간 효과 (음각) */
+            box-shadow: inset 6px 6px 12px #b8c4d0,
+                inset -6px -6px 12px rgba(255, 255, 255, 0.8);
+            color: #1a202c;
+        }
+
+        /* 소프트 카드 내부 텍스트 스타일 */
+        .soft-card h4 {
+            color: #4a5568;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .soft-card p {
+            color: #718096;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="section">
+        <div class="section-title">1. Modern Minimal</div>
+        <div class="minimal-container">
+            <h1 class="minimal-title">Less, but better.</h1>
+            <p class="minimal-text">불필요한 요소를 모두 배제하고 정제된 시각적 본질만 남깁니다. 넓은 여백은 시선의 흐름을 유도하며, 구조적인 안정감을 전달하는 핵심 요소입니다.</p>
+            <a href="#" class="minimal-link">Read perspective</a>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">2. Editorial</div>
+        <div class="editorial-container">
+            <div class="editorial-header">
+                <span class="editorial-tag">Issue 04</span>
+                <h1 class="editorial-title">BOLD<br>LAY OUT.</h1>
+            </div>
+            <p class="editorial-lead">잡지나 인쇄 매체의 시각 문법을 스크린으로 가져왔습니다. 거대한 타이포그래피와 예측 불가능한 격자 파괴를 통해 강렬한 메시지를 각인시킵니다.</p>
+            <div class="editorial-meta">DESIGN TRENDS / JUN 2026</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">3. Soft UI (Neumorphism Variation)</div>
+        <div class="soft-container">
+            <div class="soft-card">
+                <h4>Soft Volume</h4>
+                <p>배경과 오브젝트가 분리되지 않고 하나의 표면에서 부드럽게 튀어나온 듯한 질감을 형성합니다.</p>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <button class="soft-button">Interactive</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

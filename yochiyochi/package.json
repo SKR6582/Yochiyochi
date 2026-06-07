@@ -1,9 +1,9 @@
 {
   "name": "yochiyochi",
   "version": "1.0.0",
-  "description": "An Electron application with React and TypeScript",
+  "description": "일본어 교실 수업 및 학급 보조 활동 도구 (요치요치)",
   "main": "./out/main/index.js",
-  "author": "example.com",
+  "author": "SKR6582",
   "homepage": "https://electron-vite.org",
   "scripts": {
     "format": "prettier --write .",

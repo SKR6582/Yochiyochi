@@ -59,6 +59,21 @@ export const translations: Translations = {
     ja: '🖱 左クリック: 筆記  •  🖱 右クリック: 消しゴム'
   },
   helpLessons: { ko: 'Lessons 탭에서는 설정한 범위 내에서 히라가나/가타카나를 무작위로 뽑을 수 있습니다.', en: 'In the Lessons tab, you can randomly draw characters within the set range.', ja: 'Lessonsタブでは、設定した範囲内で文字をランダムに引くことができます。' },
+  helpWhiteboard: {
+    ko: '화이트보드 탭에서는 자유롭게 필기를 할 수 있습니다. 획 위에 우클릭을 하면 해당 획 전체가 지워지는 스마트 획 지우개를 지원합니다.',
+    en: 'In the Whiteboard tab, you can write freely. Right-click on a stroke to erase the entire path with the smart path eraser.',
+    ja: 'ホワイトボードタブでは、自由に手書きができます。描いた線の上で右クリックすると、線全体が消えるインテリジェント消しゴムをサポートしています。'
+  },
+  helpHotkeysTitle: {
+    ko: '스마트 단축키 가이드',
+    en: 'Smart Shortcut Guide',
+    ja: 'スマートショートカットガイド'
+  },
+  helpHotkeys: {
+    ko: '• Space / R: 무작위 문자 새로 뽑기 (Lessons)\n• 마우스 우클릭: 화이트보드 획 단위 지우개',
+    en: '• Space / R: Random draw new character (Lessons)\n• Mouse Right Click: Erase stroke-by-stroke in Whiteboard',
+    ja: '• Space / R: 該当文字をランダムに引く (Lessons)\n• マウス右クリック: ホワイトボードで線単位で消去'
+  },
   helpHistory: { ko: '기록 탭에서는 지금까지 뽑은 글자들의 내역을 확인하고 다시 띄울 수 있습니다.', en: 'In the History tab, you can view the drawn characters and display them again.', ja: '履歴タブでは、これまでに引いた文字の履歴を確認し、再度表示できます。' },
   helpNumber: { ko: '숫자 탭에서는 반 별 프리셋을 만들어 결석자를 제외하고 무작위 숫자를 뽑을 수 있습니다.', en: 'In the Number tab, you can create presets per class to draw a random number excluding absentees.', ja: '数字タブでは、クラスごとのプリセットを作成し、欠席者を除外してランダムな数字を引くことができます。' },
   helpCards: { ko: '카드 탭에서는 모든 글자의 목록을 보고 원하는 글자를 클릭해 화면에 크게 띄울 수 있습니다.', en: 'In the Cards tab, you can view all characters and click to display them large.', ja: 'カードタブでは、すべての文字のリストを表示し、クリックして大きく表示できます。' },

@@ -14,7 +14,8 @@ const TopNav: React.FC<TopNavProps> = ({ currentPage, setCurrentPage, onOpenSett
     { id: 'lessons', label: t('lessons', uiLanguage) },
     { id: 'history', label: t('history', uiLanguage) },
     { id: 'number', label: t('number', uiLanguage) },
-    { id: 'cards', label: t('cards', uiLanguage) }
+    { id: 'cards', label: t('cards', uiLanguage) },
+    { id: 'whiteboard', label: t('whiteboard', uiLanguage) }
   ]
 
   return (

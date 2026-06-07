@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { t } from '../utils/i18n'
 import { UiLanguage } from '../components/SettingsModal'
 
@@ -10,18 +10,37 @@ type Preset = {
 }
 
 const DEFAULT_PRESETS: Preset[] = [
-  { name: '1반', min: '1', max: '30', excluded: '' },
-  { name: '2반', min: '1', max: '28', excluded: '' },
-  { name: '3반', min: '1', max: '32', excluded: '' }
+  { name: 'A반', min: '1', max: '30', excluded: '' },
+  { name: 'B반', min: '1', max: '28', excluded: '' },
+  { name: 'C반', min: '1', max: '32', excluded: '' }
 ]
 
-const NumberDrawPage: React.FC<{ uiLanguage: UiLanguage }> = ({ uiLanguage }) => {
+const NumberDrawPage: React.FC<{
+  uiLanguage: UiLanguage
+  drawHistory: Record<string, Record<number, number>>
+  setDrawHistory: React.Dispatch<React.SetStateAction<Record<string, Record<number, number>>>>
+}> = ({ uiLanguage, drawHistory, setDrawHistory }) => {
   const [presets, setPresets] = useState<Preset[]>(DEFAULT_PRESETS)
   const [activePresetIndex, setActivePresetIndex] = useState(0)
   const [result, setResult] = useState<number | null>(null)
   const [isAnimating, setIsAnimating] = useState(false)
-  const [isEditingPresets, setIsEditingPresets] = useState(false)
   const [isGlowing, setIsGlowing] = useState(false)
+  const [reel, setReel] = useState<(number | string)[]>(['?'])
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [isTransitioning, setIsTransitioning] = useState(false)
+
+  const transitionTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const finalizeTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const glowTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  // Cleanup timeouts on unmount
+  useEffect(() => {
+    return () => {
+      if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current)
+      if (finalizeTimeoutRef.current) clearTimeout(finalizeTimeoutRef.current)
+      if (glowTimeoutRef.current) clearTimeout(glowTimeoutRef.current)
+    }
+  }, [])
 
   useEffect(() => {
     window.api.loadConfig().then((config) => {
@@ -48,7 +67,7 @@ const NumberDrawPage: React.FC<{ uiLanguage: UiLanguage }> = ({ uiLanguage }) =>
 
   const addPreset = () => {
     const newPreset: Preset = {
-      name: `${presets.length + 1}반`,
+      name: `${String.fromCharCode(65 + (presets.length % 26))}반`,
       min: '1',
       max: '30',
       excluded: ''
@@ -82,30 +101,63 @@ const NumberDrawPage: React.FC<{ uiLanguage: UiLanguage }> = ({ uiLanguage }) =>
     }
     if (pool.length === 0) return
 
+    const final = pool[Math.floor(Math.random() * pool.length)]
+
+    // Generate reel: start with current display value, add 18 random numbers, end with final
+    const currentVal = reel[activeIndex] !== undefined ? reel[activeIndex] : '?'
+    const randomCount = 18
+    const newReel: (number | string)[] = [currentVal]
+    for (let i = 0; i < randomCount; i++) {
+      newReel.push(pool[Math.floor(Math.random() * pool.length)])
+    }
+    newReel.push(final)
+
+    // Clear any previous timeouts
+    if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current)
+    if (finalizeTimeoutRef.current) clearTimeout(finalizeTimeoutRef.current)
+    if (glowTimeoutRef.current) clearTimeout(glowTimeoutRef.current)
+
     setIsAnimating(true)
     setIsGlowing(false)
+    setReel(newReel)
+    setActiveIndex(0)
+    setIsTransitioning(false)
 
-    // ~2s animation: 20 frames, starts fast and eases out
-    let count = 0
-    const totalFrames = 20
-    const runFrame = () => {
-      setResult(pool[Math.floor(Math.random() * pool.length)])
-      count++
-      if (count >= totalFrames) {
-        const final = pool[Math.floor(Math.random() * pool.length)]
-        setResult(final)
-        setIsAnimating(false)
-        setIsGlowing(true)
-        // Glow lasts 2 seconds
-        setTimeout(() => setIsGlowing(false), 2000)
-        return
-      }
-      // Ease-out: 30ms base + 5ms per frame ≈ total ~2s
-      const delay = 30 + count * 5
-      setTimeout(runFrame, delay)
-    }
-    runFrame()
-  }, [activePreset])
+    // Trigger transition in the next tick
+    transitionTimeoutRef.current = setTimeout(() => {
+      setIsTransitioning(true)
+      setActiveIndex(newReel.length - 1)
+    }, 50)
+
+    // Finalize the draw after 2.5s transition + 50ms buffer
+    finalizeTimeoutRef.current = setTimeout(() => {
+      setResult(final)
+
+      // Reset reel to single item
+      setReel([final])
+      setActiveIndex(0)
+      setIsTransitioning(false)
+
+      // Increment specific number count under active preset
+      setDrawHistory((prev) => {
+        const presetCounts = prev[activePreset.name] || {}
+        return {
+          ...prev,
+          [activePreset.name]: {
+            ...presetCounts,
+            [final]: (presetCounts[final] || 0) + 1
+          }
+        }
+      })
+
+      setIsAnimating(false)
+      setIsGlowing(true)
+
+      glowTimeoutRef.current = setTimeout(() => {
+        setIsGlowing(false)
+      }, 2000)
+    }, 2550)
+  }, [activePreset, reel, activeIndex, setDrawHistory])
 
   const renderButtonText = () => {
     if (uiLanguage === 'ko') {
@@ -119,9 +171,7 @@ const NumberDrawPage: React.FC<{ uiLanguage: UiLanguage }> = ({ uiLanguage }) =>
     return <span style={{ fontSize: '24px', fontWeight: 800 }}>{t('drawBtn', uiLanguage)}</span>
   }
 
-  const displayVal = result !== null ? String(result) : '?'
-  const fontSz = displayVal.length >= 3 ? '160px' : displayVal.length >= 2 ? '220px' : '340px'
-  const lineHt = displayVal.length >= 3 ? '310px' : displayVal.length >= 2 ? '310px' : '310px'
+  const currentNumCount = result !== null ? (drawHistory[activePreset.name]?.[result] || 0) : 0
 
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -129,43 +179,64 @@ const NumberDrawPage: React.FC<{ uiLanguage: UiLanguage }> = ({ uiLanguage }) =>
         {/* Main Area */}
         <div className="canvas-area" style={{ flex: 1 }}>
           <div
-            key={result !== null ? result : 'empty'}
+            key="number-draw-card"
             className="animate-float-up delay-100"
             style={{
               width: '460px',
               height: '460px',
               borderRadius: '32px',
               backgroundColor: '#ECEEF2',
-              boxShadow: '-10px -10px 20px rgba(255, 255, 255, 0.8), 10px 10px 20px rgba(0, 0, 0, 0.12)',
-              border: '1px solid rgba(255, 255, 255, 0.5)',
+              boxShadow: isGlowing 
+                ? '0 0 40px rgba(59, 130, 246, 0.35), -10px -10px 20px rgba(255, 255, 255, 0.8), 10px 10px 20px rgba(0, 0, 0, 0.12)'
+                : '-10px -10px 20px rgba(255, 255, 255, 0.8), 10px 10px 20px rgba(0, 0, 0, 0.12)',
+              border: isGlowing 
+                ? '1px solid rgba(59, 130, 246, 0.4)'
+                : '1px solid rgba(255, 255, 255, 0.5)',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              position: 'relative'
+              position: 'relative',
+              transition: 'all 0.35s cubic-bezier(0.25, 1, 0.5, 1)',
+              transform: isAnimating 
+                ? 'scale(0.97)' 
+                : isGlowing 
+                  ? 'scale(1.03)' 
+                  : 'scale(1)'
             }}
           >
-            {/* 타이틀 레이블 (카드 내부 상단 배치 - 32px 울트라 볼드) */}
-            <p
-              className="label-lg"
-              style={{
-                position: 'absolute',
-                top: '56px',
-                color: 'var(--primary)',
-                fontWeight: 900,
-                fontSize: '26px',
-                letterSpacing: '0.05em',
-                marginBottom: 0
-              }}
-            >
-              {t('randomNumber', uiLanguage)}
-            </p>
-            
+
+            {/* 누적 뽑기 횟수 표시 배지 */}
+            {!isAnimating && currentNumCount > 0 && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '24px',
+                  right: '24px',
+                  padding: '4px 10px',
+                  borderRadius: '99px',
+                  backgroundColor: 'rgba(59, 130, 246, 0.08)',
+                  border: '1px solid rgba(59, 130, 246, 0.15)',
+                  color: 'var(--primary)',
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  letterSpacing: '-0.02em',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+                }}
+              >
+                <span style={{ display: 'inline-block', width: '5px', height: '5px', borderRadius: '50%', backgroundColor: 'var(--primary)' }} />
+                {t('numberDrawCountLabel', uiLanguage, { count: currentNumCount })}
+              </div>
+            )}
+
             {/* 보조 프리셋 정보 텍스트 (타이틀 아래 배치) */}
             <p
               style={{
                 position: 'absolute',
-                top: '96px',
+                top: '56px',
                 fontSize: '13px',
                 fontWeight: 600,
                 color: 'var(--neutral)',
@@ -178,24 +249,52 @@ const NumberDrawPage: React.FC<{ uiLanguage: UiLanguage }> = ({ uiLanguage }) =>
               {activePreset.excluded ? ` (${t('excluded', uiLanguage)}: ${activePreset.excluded})` : ''}
             </p>
 
+            {/* 슬롯머신 회전식 숫자 뷰포트 */}
             <div
               className="display-xl"
               style={{
-                transition: isGlowing ? 'all 0.3s ease-out' : 'transform 0.1s',
-                transform: isAnimating 
-                  ? 'translateY(36px) scale(1.05)' 
-                  : isGlowing 
-                    ? 'translateY(36px) scale(1.1)' 
-                    : 'translateY(36px) scale(1)',
-                color: isGlowing ? 'var(--primary)' : 'var(--neutral)',
-                textShadow: isGlowing
-                  ? '0 0 20px rgba(59,130,246,0.5), 0 0 50px rgba(59,130,246,0.25)'
-                  : 'none',
-                fontSize: fontSz,
-                lineHeight: lineHt
+                width: '100%',
+                height: '320px',
+                overflow: 'hidden',
+                position: 'relative',
+                transform: 'translateY(36px)'
               }}
             >
-              {displayVal}
+              <div
+                style={{
+                  width: '100%',
+                  transform: `translateY(-${activeIndex * 320}px)`,
+                  transitionProperty: 'transform, color, text-shadow',
+                  transitionDuration: isTransitioning ? '2.5s, 0.3s, 0.3s' : '0s, 0.3s, 0.3s',
+                  transitionTimingFunction: 'cubic-bezier(0.1, 0.9, 0.15, 1), ease-out, ease-out',
+                  color: isGlowing ? 'var(--primary)' : 'var(--neutral)',
+                  textShadow: isGlowing
+                    ? '0 0 20px rgba(59, 130, 246, 0.4), 0 0 50px rgba(59, 130, 246, 0.2)'
+                    : 'none'
+                }}
+              >
+                {reel.map((num, idx) => {
+                  const str = String(num)
+                  const fSz = str.length >= 3 ? '160px' : str.length >= 2 ? '220px' : '340px'
+                  return (
+                    <div
+                      key={idx}
+                      style={{
+                        width: '100%',
+                        height: '320px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: fSz,
+                        lineHeight: '320px',
+                        fontWeight: 900
+                      }}
+                    >
+                      {str}
+                    </div>
+                  )
+                })}
+              </div>
             </div>
           </div>
         </div>

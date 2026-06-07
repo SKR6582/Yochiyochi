@@ -13,6 +13,7 @@ export const translations: Translations = {
   history: { ko: '기록', en: 'History', ja: '履歴' },
   number: { ko: '숫자', en: 'Number', ja: '数字' },
   cards: { ko: '카드', en: 'Cards', ja: 'カード' },
+  whiteboard: { ko: '화이트보드', en: 'Whiteboard', ja: 'ホワイトボード' },
   settings: { ko: '설정', en: 'Settings', ja: '設定' },
   help: { ko: '도움말 가이드', en: 'Help Guide', ja: 'ヘルプガイド' },
   learningPanel: { ko: '학습 설정', en: 'LEARNING PANEL', ja: '学習パネル' },
@@ -44,10 +45,19 @@ export const translations: Translations = {
   deletePreset: { ko: '이 프리셋 삭제', en: 'Delete this preset', ja: 'このプリセットを削除' },
   presetTip: { ko: 'TIP: 반 별로 프리셋을 만들어 결석자를 제외할 수 있습니다.', en: 'TIP: Create presets per class to exclude absentees.', ja: 'ヒント: クラスごとのプリセットを作成して欠席者を除外できます。' },
   languageSettings: { ko: '언어 설정', en: 'LANGUAGE', ja: '言語設定' },
+  themeSettings: { ko: '테마 설정', en: 'THEME SETTINGS', ja: 'テーマ設定' },
+  themeColorLabel: { ko: '앱 테마 색상', en: 'App Theme Color', ja: 'アプリのテーマカラー' },
   'NO_SELECTION': { ko: '학습 범위를 하나 이상 켜주세요.', en: 'Please turn on at least one learning range.', ja: '学習範囲を1つ以上オンにしてください。' },
   numberUnit: { ko: '번', en: '', ja: '番' },
   excluded: { ko: '제외', en: 'Excluded', ja: '除外' },
+  drawCountLabel: { ko: '누적 {count}회', en: 'Draw #{count}', ja: '累計 {count}回' },
+  numberDrawCountLabel: { ko: '{count}번째', en: '{count} time(s)', ja: '{count}回目' },
   helpTitle: { ko: '요치요치 도움말', en: 'YochiYochi Help', ja: 'ヨチヨチ ヘルプ' },
+  whiteboardGuide: {
+    ko: '🖱 좌클릭 : 필기  •  🖱 우클릭 : 지우개',
+    en: '🖱 Left Click: Write  •  🖱 Right Click: Erase',
+    ja: '🖱 左クリック: 筆記  •  🖱 右クリック: 消しゴム'
+  },
   helpLessons: { ko: 'Lessons 탭에서는 설정한 범위 내에서 히라가나/가타카나를 무작위로 뽑을 수 있습니다.', en: 'In the Lessons tab, you can randomly draw characters within the set range.', ja: 'Lessonsタブでは、設定した範囲内で文字をランダムに引くことができます。' },
   helpHistory: { ko: '기록 탭에서는 지금까지 뽑은 글자들의 내역을 확인하고 다시 띄울 수 있습니다.', en: 'In the History tab, you can view the drawn characters and display them again.', ja: '履歴タブでは、これまでに引いた文字の履歴を確認し、再度表示できます。' },
   helpNumber: { ko: '숫자 탭에서는 반 별 프리셋을 만들어 결석자를 제외하고 무작위 숫자를 뽑을 수 있습니다.', en: 'In the Number tab, you can create presets per class to draw a random number excluding absentees.', ja: '数字タブでは、クラスごとのプリセットを作成し、欠席者を除外してランダムな数字を引くことができます。' },
@@ -57,12 +67,12 @@ export const translations: Translations = {
 
 export function t(key: string, lang: UiLanguage, params?: Record<string, string | number>): string {
   const translation = translations[key]?.[lang] || translations[key]?.['ko'] || key
-  
+
   if (params) {
     return Object.keys(params).reduce((str, paramKey) => {
       return str.replace(`{${paramKey}}`, String(params[paramKey]))
     }, translation)
   }
-  
+
   return translation
 }

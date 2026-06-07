@@ -6,7 +6,9 @@ import BottomBar from './components/BottomBar'
 import HistoryPage from './pages/HistoryPage'
 import NumberDrawPage from './pages/NumberDrawPage'
 import CardListPage from './pages/CardListPage'
-import SettingsModal, { UiLanguage } from './components/SettingsModal'
+import { UiLanguage } from './components/SettingsModal'
+import SettingsPage from './pages/SettingsPage'
+import WhiteboardPage from './pages/WhiteboardPage'
 import HelpModal from './components/HelpModal'
 
 type CharacterEntry = {
@@ -20,10 +22,17 @@ type HistoryEntry = CharacterEntry & {
 }
 
 function App(): React.JSX.Element {
+  const isSettingsWindow = window.location.hash.includes('settings') || window.location.search.includes('settings')
+
+  if (isSettingsWindow) {
+    return <SettingsPage />
+  }
+
   const [currentPage, setCurrentPage] = useState('lessons')
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const [isHelpOpen, setIsHelpOpen] = useState(false)
   const [uiLanguage, setUiLanguage] = useState<UiLanguage>('ko')
+  const [numberDrawHistory, setNumberDrawHistory] = useState<Record<string, Record<number, number>>>({})
+  const [themeColor, setThemeColor] = useState<string>('#006c49')
 
   // ── 문자 종류 ──
   const [scriptType, setScriptType] = useState<'hiragana' | 'katakana' | 'mixed'>('hiragana')
@@ -37,7 +46,6 @@ function App(): React.JSX.Element {
 
   // ── 표시 옵션 ──
   const [showRomaji, setShowRomaji] = useState(true)
-  const [showExample, setShowExample] = useState(true)
 
   // Load config on mount
   useEffect(() => {
@@ -50,8 +58,25 @@ function App(): React.JSX.Element {
       if (typeof config.useYoon === 'boolean') setUseYoon(config.useYoon)
       if (typeof config.preventDuplicates === 'boolean') setPreventDuplicates(config.preventDuplicates)
       if (typeof config.showRomaji === 'boolean') setShowRomaji(config.showRomaji)
-      if (typeof config.showExample === 'boolean') setShowExample(config.showExample)
+      if (config.themeColor) {
+        setThemeColor(config.themeColor)
+        document.documentElement.style.setProperty('--primary', config.themeColor)
+        document.documentElement.style.setProperty('--primary-container', config.themeColorContainer || config.themeColor)
+      }
     })
+  }, [])
+
+  // Listen for config updates from other windows
+  useEffect(() => {
+    const removeListener = window.api.onConfigUpdated((newConfig) => {
+      if (newConfig.uiLanguage) setUiLanguage(newConfig.uiLanguage)
+      if (newConfig.themeColor) {
+        setThemeColor(newConfig.themeColor)
+        document.documentElement.style.setProperty('--primary', newConfig.themeColor)
+        document.documentElement.style.setProperty('--primary-container', newConfig.themeColorContainer || newConfig.themeColor)
+      }
+    })
+    return () => removeListener()
   }, [])
 
   // Save config on change
@@ -64,8 +89,7 @@ function App(): React.JSX.Element {
       useHandakuon,
       useYoon,
       preventDuplicates,
-      showRomaji,
-      showExample
+      showRomaji
     })
   }, [
     uiLanguage,
@@ -75,8 +99,7 @@ function App(): React.JSX.Element {
     useHandakuon,
     useYoon,
     preventDuplicates,
-    showRomaji,
-    showExample
+    showRomaji
   ])
 
   // ── 현재 글자 ──
@@ -167,7 +190,7 @@ function App(): React.JSX.Element {
       <TopNav
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-        onOpenSettings={() => setIsSettingsOpen(true)}
+        onOpenSettings={() => window.api.openSettingsWindow()}
         onOpenHelp={() => setIsHelpOpen(true)}
         uiLanguage={uiLanguage}
       />
@@ -198,8 +221,6 @@ function App(): React.JSX.Element {
               setPreventDuplicates={setPreventDuplicates}
               showRomaji={showRomaji}
               setShowRomaji={setShowRomaji}
-              showExample={showExample}
-              setShowExample={setShowExample}
             />
           </div>
           <BottomBar onDraw={handleDraw} uiLanguage={uiLanguage} />
@@ -215,16 +236,19 @@ function App(): React.JSX.Element {
         />
       )}
 
-      {currentPage === 'number' && <NumberDrawPage uiLanguage={uiLanguage} />}
+      {currentPage === 'number' && (
+        <NumberDrawPage
+          uiLanguage={uiLanguage}
+          drawHistory={numberDrawHistory}
+          setDrawHistory={setNumberDrawHistory}
+        />
+      )}
 
       {currentPage === 'cards' && <CardListPage onSelect={handleSelectFromCard} uiLanguage={uiLanguage} />}
 
-      <SettingsModal
-        isOpen={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
-        uiLanguage={uiLanguage}
-        setUiLanguage={setUiLanguage}
-      />
+      <div style={{ display: currentPage === 'whiteboard' ? 'flex' : 'none', flex: 1, flexDirection: 'column', overflow: 'hidden' }}>
+        <WhiteboardPage uiLanguage={uiLanguage} themeColor={themeColor} isActive={currentPage === 'whiteboard'} />
+      </div>
 
       <HelpModal
         isOpen={isHelpOpen}

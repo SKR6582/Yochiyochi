@@ -35,10 +35,16 @@ export function loadConfig() {
   return DEFAULT_CONFIG
 }
 
-export function saveConfig(config: any) {
+export function saveConfig(newConfig: any) {
   try {
     const configPath = getConfigPath()
-    fs.writeFileSync(configPath, JSON.stringify(config, null, 2), 'utf8')
+    let currentConfig = DEFAULT_CONFIG
+    if (fs.existsSync(configPath)) {
+      const data = fs.readFileSync(configPath, 'utf8')
+      currentConfig = JSON.parse(data)
+    }
+    const merged = { ...currentConfig, ...newConfig }
+    fs.writeFileSync(configPath, JSON.stringify(merged, null, 2), 'utf8')
   } catch (err) {
     console.error('Failed to save config:', err)
   }

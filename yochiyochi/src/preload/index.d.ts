@@ -29,6 +29,8 @@ declare global {
       resetHistory: () => Promise<{ success: boolean }>
       loadConfig: () => Promise<any>
       saveConfig: (config: any) => Promise<{ success: boolean }>
+      openSettingsWindow: () => void
+      onConfigUpdated: (callback: (config: any) => void) => () => void
     }
   }
 }

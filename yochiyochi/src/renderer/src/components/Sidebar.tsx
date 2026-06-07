@@ -17,8 +17,6 @@ type SidebarProps = {
   setPreventDuplicates: (v: boolean) => void
   showRomaji: boolean
   setShowRomaji: (v: boolean) => void
-  showExample: boolean
-  setShowExample: (v: boolean) => void
 }
 
 const ToggleRow: React.FC<{ label: string; checked: boolean; onChange: (v: boolean) => void }> = ({
@@ -57,9 +55,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   preventDuplicates,
   setPreventDuplicates,
   showRomaji,
-  setShowRomaji,
-  showExample,
-  setShowExample
+  setShowRomaji
 }) => {
   return (
     <aside className="sidebar-area">
@@ -109,7 +105,6 @@ const Sidebar: React.FC<SidebarProps> = ({
           <ToggleRow label={t('dakuon', uiLanguage)} checked={useDakuon} onChange={setUseDakuon} />
           <ToggleRow label={t('handakuon', uiLanguage)} checked={useHandakuon} onChange={setUseHandakuon} />
           <ToggleRow label={t('yoon', uiLanguage)} checked={useYoon} onChange={setUseYoon} />
-          <ToggleRow label={t('preventDuplicates', uiLanguage)} checked={preventDuplicates} onChange={setPreventDuplicates} />
         </div>
 
         {/* ── 표시 옵션 (DISPLAY) ── */}
@@ -121,7 +116,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           style={{ padding: '8px 24px', marginBottom: '24px' }}
         >
           <ToggleRow label={t('showRomaji', uiLanguage)} checked={showRomaji} onChange={setShowRomaji} />
-          <ToggleRow label={t('showExample', uiLanguage)} checked={showExample} onChange={setShowExample} />
+          <ToggleRow label={t('preventDuplicates', uiLanguage)} checked={preventDuplicates} onChange={setPreventDuplicates} />
         </div>
 
         {/* TIP */}

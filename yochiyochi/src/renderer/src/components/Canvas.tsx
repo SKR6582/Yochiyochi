@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { t } from '../utils/i18n'
 import { UiLanguage } from './SettingsModal'
 
@@ -12,10 +12,69 @@ type CanvasProps = {
 
 const Canvas: React.FC<CanvasProps> = ({ character, errorMessage, showRomaji, uiLanguage, recentHistory }) => {
   const [animKey, setAnimKey] = useState(0)
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const [isDrawing, setIsDrawing] = useState(false)
 
   useEffect(() => {
     setAnimKey((prev) => prev + 1)
   }, [character])
+
+  const getCoords = (e: React.MouseEvent | React.TouchEvent) => {
+    const canvas = canvasRef.current
+    if (!canvas) return { x: 0, y: 0 }
+    const rect = canvas.getBoundingClientRect()
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY
+    const x = ((clientX - rect.left) / rect.width) * canvas.width
+    const y = ((clientY - rect.top) / rect.height) * canvas.height
+    return { x, y }
+  }
+
+  const startDrawing = (e: React.MouseEvent | React.TouchEvent) => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    setIsDrawing(true)
+    const { x, y } = getCoords(e)
+    ctx.beginPath()
+    ctx.moveTo(x, y)
+    ctx.lineWidth = 8
+    ctx.lineCap = 'round'
+    ctx.lineJoin = 'round'
+    const activeColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#006c49'
+    ctx.strokeStyle = activeColor
+  }
+
+  const draw = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!isDrawing) return
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    if (e.cancelable) {
+      e.preventDefault()
+    }
+
+    const { x, y } = getCoords(e)
+    ctx.lineTo(x, y)
+    ctx.stroke()
+  }
+
+  const stopDrawing = () => {
+    setIsDrawing(false)
+  }
+
+  const clearCanvas = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+  }
 
   return (
     <main className="canvas-area">
@@ -50,6 +109,58 @@ const Canvas: React.FC<CanvasProps> = ({ character, errorMessage, showRomaji, ui
           </>
         ) : (
           <>
+            {/* 그리기 초기화 버튼 */}
+            <button
+              onClick={clearCanvas}
+              style={{
+                position: 'absolute',
+                top: '24px',
+                right: '24px',
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                border: '1px solid var(--border-light)',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                zIndex: 10,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 0.2s'
+              }}
+              title="지우기 (Clear)"
+            >
+              <svg style={{ width: '18px', height: '18px', fill: 'none', stroke: 'var(--neutral)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' }} viewBox="0 0 24 24">
+                <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+              </svg>
+            </button>
+
+            {/* 그리기 캔버스 */}
+            <canvas
+              ref={canvasRef}
+              width={920}
+              height={920}
+              onMouseDown={startDrawing}
+              onMouseMove={draw}
+              onMouseUp={stopDrawing}
+              onMouseLeave={stopDrawing}
+              onTouchStart={startDrawing}
+              onTouchMove={draw}
+              onTouchEnd={stopDrawing}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                borderRadius: '32px',
+                cursor: 'crosshair',
+                zIndex: 5,
+                touchAction: 'none'
+              }}
+            />
+
             {/* 발음 표시 (카드 내부 상단에 둥실 안착 - 4K 스마트보드용 32px 울트라 볼드) */}
             {showRomaji && (
               <span

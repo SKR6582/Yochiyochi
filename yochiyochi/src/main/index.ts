@@ -7,6 +7,7 @@ import { loadConfig, saveConfig } from './store'
 
 // ── 중복 방지 히스토리 ──
 let drawHistory: string[] = []
+let settingsWindow: BrowserWindow | null = null
 
 function toKatakana(hira: string): string {
   return Array.from(hira)
@@ -121,7 +122,44 @@ app.whenReady().then(() => {
 
   ipcMain.handle('save-config', (_event, config) => {
     saveConfig(config)
+    BrowserWindow.getAllWindows().forEach((win) => {
+      win.webContents.send('config-updated', config)
+    })
     return { success: true }
+  })
+
+  ipcMain.on('open-settings-window', () => {
+    if (settingsWindow) {
+      if (settingsWindow.isMinimized()) settingsWindow.restore()
+      settingsWindow.focus()
+      return
+    }
+
+    settingsWindow = new BrowserWindow({
+      width: 480,
+      height: 520,
+      resizable: false,
+      show: false,
+      autoHideMenuBar: true,
+      webPreferences: {
+        preload: join(__dirname, '../preload/index.js'),
+        sandbox: false
+      }
+    })
+
+    settingsWindow.on('ready-to-show', () => {
+      settingsWindow?.show()
+    })
+
+    settingsWindow.on('closed', () => {
+      settingsWindow = null
+    })
+
+    if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+      settingsWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '#/settings')
+    } else {
+      settingsWindow.loadURL(join(__dirname, '../renderer/index.html') + '#/settings')
+    }
   })
 
   createWindow()

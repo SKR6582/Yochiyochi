@@ -72,7 +72,7 @@ const SettingsPage: React.FC = () => {
         display: 'flex',
         flexDirection: 'column',
         height: '100vh',
-        overflow: 'hidden',
+        overflowY: 'auto',
         fontFamily: 'var(--font-body)',
         padding: '32px'
       }}

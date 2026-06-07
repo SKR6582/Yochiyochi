@@ -166,7 +166,7 @@ const Canvas: React.FC<CanvasProps> = ({ character, errorMessage, showRomaji, ui
               <span
                 style={{
                   position: 'absolute',
-                  top: '60px',
+                  top: '32px',
                   color: 'var(--primary)',
                   fontWeight: 900,
                   fontSize: '32px',
@@ -177,7 +177,7 @@ const Canvas: React.FC<CanvasProps> = ({ character, errorMessage, showRomaji, ui
               </span>
             )}
 
-            <div style={{ display: 'flex', alignItems: 'flex-end', transform: 'translateY(22px)' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-end', transform: 'translateY(40px)' }}>
               {character && character.char.length >= 2 ? (
                 <>
                   <span className="display-xl" style={{ fontSize: '340px', lineHeight: '310px' }}>{character.char[0]}</span>

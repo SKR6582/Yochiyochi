@@ -158,7 +158,7 @@ app.whenReady().then(() => {
     if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
       settingsWindow.loadURL(process.env['ELECTRON_RENDERER_URL'] + '#/settings')
     } else {
-      settingsWindow.loadURL(join(__dirname, '../renderer/index.html') + '#/settings')
+      settingsWindow.loadFile(join(__dirname, '../renderer/index.html'), { hash: 'settings' })
     }
   })
 

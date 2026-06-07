@@ -33,6 +33,7 @@ function App(): React.JSX.Element {
   const [uiLanguage, setUiLanguage] = useState<UiLanguage>('ko')
   const [numberDrawHistory, setNumberDrawHistory] = useState<Record<string, Record<number, number>>>({})
   const [themeColor, setThemeColor] = useState<string>('#006c49')
+  const [isConfigLoaded, setIsConfigLoaded] = useState(false)
 
   // ── 문자 종류 ──
   const [scriptType, setScriptType] = useState<'hiragana' | 'katakana' | 'mixed'>('hiragana')
@@ -63,6 +64,7 @@ function App(): React.JSX.Element {
         document.documentElement.style.setProperty('--primary', config.themeColor)
         document.documentElement.style.setProperty('--primary-container', config.themeColorContainer || config.themeColor)
       }
+      setIsConfigLoaded(true)
     })
   }, [])
 
@@ -81,6 +83,7 @@ function App(): React.JSX.Element {
 
   // Save config on change
   useEffect(() => {
+    if (!isConfigLoaded) return
     window.api.saveConfig({
       uiLanguage,
       scriptType,
@@ -92,6 +95,7 @@ function App(): React.JSX.Element {
       showRomaji
     })
   }, [
+    isConfigLoaded,
     uiLanguage,
     scriptType,
     useSeion,
@@ -145,8 +149,9 @@ function App(): React.JSX.Element {
 
   // 토글 변경 시 자동으로 새 글자 뽑기
   useEffect(() => {
+    if (!isConfigLoaded) return
     handleDraw()
-  }, [handleDraw])
+  }, [isConfigLoaded, handleDraw])
 
   // ── 스마트 단축키 리스너 (교사용 무선 핫키) ──
   useEffect(() => {

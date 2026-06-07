@@ -1,4 +1,4 @@
-# Yochiyochi (요치요치) 🎒🌸
+# Yochiyochi (요치요치) 🌸
 
 [![Platform macOS](https://img.shields.io/badge/platform-macOS-lightgrey.svg)]()
 [![Platform Windows](https://img.shields.io/badge/platform-Windows-blue.svg)]()
@@ -47,35 +47,26 @@
 
 ---
 
-## 🚀 개발 및 빌드 환경 가이드
+## 📥 다운로드 및 실행 방법 (Download & Run)
 
-프로젝트 코드는 `/yochiyochi` 하위 디렉토리에 위치해 있습니다.
+일반 사용자는 별도의 빌드 과정 없이, 우측의 **Releases** 탭에서 사용 중인 운영체제(OS)에 맞는 설치 파일을 다운로드하여 즉시 사용하실 수 있습니다.
 
-### 1. 패키지 설치
-```bash
-$ cd yochiyochi
-$ npm install
-```
+### 🍎 macOS 실행 가이드 (보안 경고 우회)
+> [!IMPORTANT]
+> 정식 App Store 심사를 거치지 않은 Ad-hoc 배포본이므로 최초 실행 시 시스템 차단 팝업이 나타날 수 있습니다.
+1. **Releases**에서 `.dmg` 파일을 다운로드하여 실행한 뒤, Yochiyochi 앱을 **Applications (응용 프로그램)** 폴더로 드래그하여 설치합니다.
+2. 앱을 처음 실행할 때 *"확인되지 않은 개발자가 배포했기 때문에 열 수 없습니다"* 경고창이 뜨면 **[확인]**을 누릅니다.
+3. 응용 프로그램 폴더의 `Yochiyochi` 앱 아이콘을 마우스 **우클릭(두 손가락 클릭)** 한 뒤 **[열기]**를 선택합니다.
+4. 다시 나타나는 확인 창에서 **[열기]** 버튼을 클릭하여 실행합니다. (최초 1회 설정 후에는 이후 일반 앱처럼 바로 켜집니다.)
 
-### 2. 로컬 개발 서버 구동
-```bash
-$ npm run dev
-```
+### 🐬 Windows 실행 가이드 (보안 경고 우회)
+> [!IMPORTANT]
+> 코드 서명 인증서가 포함되지 않은 Unsigned 빌드이므로 설치 시 SmartScreen 차단 화면이 나타납니다.
+1. **Releases**에서 `-setup.exe` 파일을 다운로드하여 실행합니다.
+2. 실행 시 파란색 경고창(*"Windows의 PC 보호"*)이 나타나면 본문 내부의 **[추가 정보]** 링크를 클릭합니다.
+3. 우측 하단에 나타나는 **[실행]** 버튼을 클릭하여 설치 및 실행을 완료합니다.
 
-### 3. 플랫폼별 빌드 (배포 패키지 생성)
-코드 서명 생략 빌드를 지원하여 로컬에서 즉시 설치용 패키지를 추출할 수 있습니다.
-
-```bash
-# macOS 빌드 (DMG 및 ZIP 생성)
-$ CSC_IDENTITY_AUTO_DISCOVERY=false npm run build:mac
-
-# Windows 빌드 (EXE 설치 파일 생성)
-$ npm run build:win
-
-# Linux 빌드
-$ npm run build:linux
-```
-빌드된 결과물은 `yochiyochi/dist` 디렉토리에 보관됩니다.
+---
 
 ---
 

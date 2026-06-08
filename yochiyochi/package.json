@@ -1,6 +1,6 @@
 {
   "name": "yochiyochi",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "일본어 교실 수업 및 학급 보조 활동 도구 (요치요치)",
   "main": "./out/main/index.js",
   "author": "SKR6582",

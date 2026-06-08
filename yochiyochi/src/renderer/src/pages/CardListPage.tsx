@@ -59,19 +59,69 @@ const getSections = (uiLanguage: UiLanguage) => [
   { title: t('yoon', uiLanguage), data: yoon, type: 'yoon' }
 ]
 
+function toKatakana(hira: string): string {
+  return Array.from(hira)
+    .map((c) => {
+      const code = c.charCodeAt(0)
+      if (code >= 0x3041 && code <= 0x3096) {
+        return String.fromCharCode(code + 0x60)
+      }
+      return c
+    })
+    .join('')
+}
+
 const CardListPage: React.FC<CardListPageProps> = ({ onSelect, uiLanguage }) => {
   const [selected, setSelected] = useState<CharacterEntry | null>(null)
+  const [scriptType, setScriptType] = useState<'hiragana' | 'katakana'>('hiragana')
   const sections = getSections(uiLanguage)
 
-  const handleCardClick = (entry: CharacterEntry) => {
-    setSelected(entry)
-    onSelect(entry)
+  const handleCardClick = (entry: { char: string; romaji: string; type: string }) => {
+    setSelected(entry) // Store the original Hiragana entry
+    const displayChar = scriptType === 'katakana' ? toKatakana(entry.char) : entry.char
+    onSelect({ ...entry, char: displayChar })
   }
 
   return (
     <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
       {/* Card Grid */}
       <div style={{ flex: 1, overflow: 'auto', padding: '24px 32px' }}>
+        {/* Kana Selector Tabs */}
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', borderBottom: '1px solid var(--border-light)', paddingBottom: '16px' }}>
+          <button
+            onClick={() => setScriptType('hiragana')}
+            style={{
+              padding: '8px 20px',
+              borderRadius: '20px',
+              border: 'none',
+              background: scriptType === 'hiragana' ? 'var(--primary)' : 'var(--surface-container-high, #ecedf7)',
+              color: scriptType === 'hiragana' ? '#fff' : 'var(--neutral)',
+              fontWeight: 700,
+              fontSize: '13px',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            {t('hiragana', uiLanguage)}
+          </button>
+          <button
+            onClick={() => setScriptType('katakana')}
+            style={{
+              padding: '8px 20px',
+              borderRadius: '20px',
+              border: 'none',
+              background: scriptType === 'katakana' ? 'var(--primary)' : 'var(--surface-container-high, #ecedf7)',
+              color: scriptType === 'katakana' ? '#fff' : 'var(--neutral)',
+              fontWeight: 700,
+              fontSize: '13px',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            {t('katakana', uiLanguage)}
+          </button>
+        </div>
+
         {sections.map((section, sIdx) => (
           <div
             key={section.type}
@@ -93,6 +143,7 @@ const CardListPage: React.FC<CardListPageProps> = ({ onSelect, uiLanguage }) => 
             >
               {section.data.map((entry, idx) => {
                 const isSelected = selected?.char === entry.char
+                const displayChar = scriptType === 'katakana' ? toKatakana(entry.char) : entry.char
                 return (
                   <button
                     key={idx}
@@ -118,8 +169,8 @@ const CardListPage: React.FC<CardListPageProps> = ({ onSelect, uiLanguage }) => 
                       if (!isSelected) e.currentTarget.style.borderColor = 'var(--border-light)'
                     }}
                   >
-                    <span style={{ fontSize: entry.char.length >= 2 ? '18px' : '24px', fontWeight: 800, marginBottom: '2px' }}>
-                      {entry.char}
+                    <span style={{ fontSize: displayChar.length >= 2 ? '18px' : '24px', fontWeight: 800, marginBottom: '2px' }}>
+                      {displayChar}
                     </span>
                     <span style={{ fontSize: '10px', opacity: isSelected ? 0.8 : 0.5 }}>
                       {entry.romaji}
@@ -161,15 +212,15 @@ const CardListPage: React.FC<CardListPageProps> = ({ onSelect, uiLanguage }) => 
             {selected.char.length >= 2 ? (
               <>
                 <span style={{ fontSize: '540px', fontWeight: 800, lineHeight: 1 }}>
-                  {selected.char[0]}
+                  {scriptType === 'katakana' ? toKatakana(selected.char[0]) : selected.char[0]}
                 </span>
                 <span style={{ fontSize: '460px', fontWeight: 800, lineHeight: '240px' }}>
-                  {selected.char[1]}
+                  {scriptType === 'katakana' ? toKatakana(selected.char[1]) : selected.char[1]}
                 </span>
               </>
             ) : (
               <span style={{ fontSize: '540px', fontWeight: 800, lineHeight: 1 }}>
-                {selected.char}
+                {scriptType === 'katakana' ? toKatakana(selected.char) : selected.char}
               </span>
             )}
           </div>

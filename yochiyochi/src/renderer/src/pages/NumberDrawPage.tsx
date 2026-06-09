@@ -7,12 +7,13 @@ type Preset = {
   min: string
   max: string
   excluded: string // comma-separated
+  preventDuplicates?: boolean
 }
 
 const DEFAULT_PRESETS: Preset[] = [
-  { name: 'A반', min: '1', max: '30', excluded: '' },
-  { name: 'B반', min: '1', max: '28', excluded: '' },
-  { name: 'C반', min: '1', max: '32', excluded: '' }
+  { name: 'A반', min: '1', max: '30', excluded: '', preventDuplicates: false },
+  { name: 'B반', min: '1', max: '28', excluded: '', preventDuplicates: false },
+  { name: 'C반', min: '1', max: '32', excluded: '', preventDuplicates: false }
 ]
 
 const NumberDrawPage: React.FC<{
@@ -59,28 +60,38 @@ const NumberDrawPage: React.FC<{
 
   const activePreset = presets[activePresetIndex] || presets[0]
 
-  const updateActivePreset = (field: keyof Preset, value: string) => {
+  const updateActivePreset = (field: keyof Preset, value: Preset[keyof Preset]): void => {
     setPresets((prev) =>
       prev.map((p, i) => (i === activePresetIndex ? { ...p, [field]: value } : p))
     )
   }
 
-  const addPreset = () => {
+  const addPreset = (): void => {
     const newPreset: Preset = {
       name: `${String.fromCharCode(65 + (presets.length % 26))}반`,
       min: '1',
       max: '30',
-      excluded: ''
+      excluded: '',
+      preventDuplicates: false
     }
     setPresets((prev) => [...prev, newPreset])
     setActivePresetIndex(presets.length)
   }
 
-  const deletePreset = (index: number) => {
+  const deletePreset = (index: number): void => {
     if (presets.length <= 1) return
     setPresets((prev) => prev.filter((_, i) => i !== index))
     if (activePresetIndex >= index && activePresetIndex > 0) {
       setActivePresetIndex(activePresetIndex - 1)
+    }
+  }
+
+  const handleResetHistory = (): void => {
+    if (confirm(t('resetHistoryConfirm', uiLanguage))) {
+      setDrawHistory((prev) => ({
+        ...prev,
+        [activePreset.name]: {}
+      }))
     }
   }
 
@@ -101,7 +112,15 @@ const NumberDrawPage: React.FC<{
     }
     if (pool.length === 0) return
 
-    const final = pool[Math.floor(Math.random() * pool.length)]
+    const presetHistory = drawHistory[activePreset.name] || {}
+    let drawPool = pool
+    if (activePreset.preventDuplicates) {
+      const counts = pool.map((n) => presetHistory[n] || 0)
+      const minCount = Math.min(...counts)
+      drawPool = pool.filter((n) => (presetHistory[n] || 0) === minCount)
+    }
+
+    const final = drawPool[Math.floor(Math.random() * drawPool.length)]
 
     // Generate reel: start with current display value, add 18 random numbers, end with final
     const currentVal = reel[activeIndex] !== undefined ? reel[activeIndex] : '?'
@@ -157,39 +176,53 @@ const NumberDrawPage: React.FC<{
         setIsGlowing(false)
       }, 2000)
     }, 2550)
-  }, [activePreset, reel, activeIndex, setDrawHistory])
+  }, [activePreset, reel, activeIndex, setDrawHistory, drawHistory])
 
-  const renderButtonText = () => {
+  const renderButtonText = (): React.ReactNode => {
     if (uiLanguage === 'ko') {
       return (
-        <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+        <span
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+        >
           <span style={{ fontSize: '24px', fontWeight: 800 }}>뽑기</span>
-          <span style={{ fontSize: '13px', fontWeight: 500, opacity: 0.5, letterSpacing: '0.05em', transform: 'translateY(1px)' }}>DRAW</span>
+          <span
+            style={{
+              fontSize: '13px',
+              fontWeight: 500,
+              opacity: 0.5,
+              letterSpacing: '0.05em',
+              transform: 'translateY(1px)'
+            }}
+          >
+            DRAW
+          </span>
         </span>
       )
     }
     return <span style={{ fontSize: '24px', fontWeight: 800 }}>{t('drawBtn', uiLanguage)}</span>
   }
 
-  const currentNumCount = result !== null ? (drawHistory[activePreset.name]?.[result] || 0) : 0
+  const currentNumCount = result !== null ? drawHistory[activePreset.name]?.[result] || 0 : 0
 
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-      <div style={{ flex: 1, display: 'flex' }}>
+      <div style={{ flex: 1, display: 'flex', minHeight: 0 }}>
         {/* Main Area */}
         <div className="canvas-area" style={{ flex: 1 }}>
           <div
             key="number-draw-card"
             className="animate-float-up delay-100"
             style={{
-              width: '460px',
-              height: '460px',
+              width: '100%',
+              maxWidth: 'min(60vh, 460px)',
+              aspectRatio: '1 / 1',
+              containerType: 'inline-size',
               borderRadius: '32px',
               backgroundColor: '#ECEEF2',
-              boxShadow: isGlowing 
+              boxShadow: isGlowing
                 ? '0 0 40px rgba(59, 130, 246, 0.35), -10px -10px 20px rgba(255, 255, 255, 0.8), 10px 10px 20px rgba(0, 0, 0, 0.12)'
                 : '-10px -10px 20px rgba(255, 255, 255, 0.8), 10px 10px 20px rgba(0, 0, 0, 0.12)',
-              border: isGlowing 
+              border: isGlowing
                 ? '1px solid rgba(59, 130, 246, 0.4)'
                 : '1px solid rgba(255, 255, 255, 0.5)',
               display: 'flex',
@@ -198,36 +231,39 @@ const NumberDrawPage: React.FC<{
               justifyContent: 'center',
               position: 'relative',
               transition: 'all 0.35s cubic-bezier(0.25, 1, 0.5, 1)',
-              transform: isAnimating 
-                ? 'scale(0.97)' 
-                : isGlowing 
-                  ? 'scale(1.03)' 
-                  : 'scale(1)'
+              transform: isAnimating ? 'scale(0.97)' : isGlowing ? 'scale(1.03)' : 'scale(1)'
             }}
           >
-
             {/* 누적 뽑기 횟수 표시 배지 */}
             {!isAnimating && currentNumCount > 0 && (
               <div
                 style={{
                   position: 'absolute',
-                  top: '24px',
-                  right: '24px',
-                  padding: '4px 10px',
+                  top: '5cqw',
+                  right: '5cqw',
+                  padding: '0.8cqw 2cqw',
                   borderRadius: '99px',
                   backgroundColor: 'rgba(59, 130, 246, 0.08)',
                   border: '1px solid rgba(59, 130, 246, 0.15)',
                   color: 'var(--primary)',
-                  fontSize: '11px',
+                  fontSize: '2.4cqw',
                   fontWeight: 700,
                   letterSpacing: '-0.02em',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '4px',
+                  gap: '0.8cqw',
                   boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
                 }}
               >
-                <span style={{ display: 'inline-block', width: '5px', height: '5px', borderRadius: '50%', backgroundColor: 'var(--primary)' }} />
+                <span
+                  style={{
+                    display: 'inline-block',
+                    width: '1cqw',
+                    height: '1cqw',
+                    borderRadius: '50%',
+                    backgroundColor: 'var(--primary)'
+                  }}
+                />
                 {t('numberDrawCountLabel', uiLanguage, { count: currentNumCount })}
               </div>
             )}
@@ -236,8 +272,8 @@ const NumberDrawPage: React.FC<{
             <p
               style={{
                 position: 'absolute',
-                top: '56px',
-                fontSize: '13px',
+                top: '12cqw',
+                fontSize: '2.8cqw',
                 fontWeight: 600,
                 color: 'var(--neutral)',
                 opacity: 0.45,
@@ -245,8 +281,11 @@ const NumberDrawPage: React.FC<{
                 marginBottom: 0
               }}
             >
-              {activePreset.name} · {activePreset.min}~{activePreset.max}{t('numberUnit', uiLanguage)}
-              {activePreset.excluded ? ` (${t('excluded', uiLanguage)}: ${activePreset.excluded})` : ''}
+              {activePreset.name} · {activePreset.min}~{activePreset.max}
+              {t('numberUnit', uiLanguage)}
+              {activePreset.excluded
+                ? ` (${t('excluded', uiLanguage)}: ${activePreset.excluded})`
+                : ''}
             </p>
 
             {/* 슬롯머신 회전식 숫자 뷰포트 */}
@@ -254,16 +293,16 @@ const NumberDrawPage: React.FC<{
               className="display-xl"
               style={{
                 width: '100%',
-                height: '320px',
+                height: '70cqw',
                 overflow: 'hidden',
                 position: 'relative',
-                transform: 'translateY(36px)'
+                transform: 'translateY(8cqw)'
               }}
             >
               <div
                 style={{
                   width: '100%',
-                  transform: `translateY(-${activeIndex * 320}px)`,
+                  transform: `translateY(calc(-${activeIndex} * 70cqw))`,
                   transitionProperty: 'transform, color, text-shadow',
                   transitionDuration: isTransitioning ? '2.5s, 0.3s, 0.3s' : '0s, 0.3s, 0.3s',
                   transitionTimingFunction: 'cubic-bezier(0.1, 0.9, 0.15, 1), ease-out, ease-out',
@@ -275,18 +314,18 @@ const NumberDrawPage: React.FC<{
               >
                 {reel.map((num, idx) => {
                   const str = String(num)
-                  const fSz = str.length >= 3 ? '160px' : str.length >= 2 ? '220px' : '340px'
+                  const fSz = str.length >= 3 ? '35cqw' : str.length >= 2 ? '48cqw' : '74cqw'
                   return (
                     <div
                       key={idx}
                       style={{
                         width: '100%',
-                        height: '320px',
+                        height: '70cqw',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         fontSize: fSz,
-                        lineHeight: '320px',
+                        lineHeight: '70cqw',
                         fontWeight: 900
                       }}
                     >
@@ -301,7 +340,9 @@ const NumberDrawPage: React.FC<{
 
         {/* Sidebar: Presets */}
         <aside className="sidebar-area">
-          <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <div
+            style={{ padding: '24px', display: 'flex', flexDirection: 'column', height: '100%' }}
+          >
             <h2
               className="headline-lg animate-float-up delay-150"
               style={{ fontSize: '28px', lineHeight: 1, marginBottom: '8px' }}
@@ -364,9 +405,15 @@ const NumberDrawPage: React.FC<{
             </div>
 
             {/* Active Preset Settings */}
-            <div className="card animate-float-up delay-350" style={{ padding: '16px', marginBottom: '16px' }}>
+            <div
+              className="card animate-float-up delay-350"
+              style={{ padding: '16px', marginBottom: '16px' }}
+            >
               <div style={{ marginBottom: '16px' }}>
-                <label className="label-lg" style={{ fontSize: '11px', marginBottom: '6px', display: 'block' }}>
+                <label
+                  className="label-lg"
+                  style={{ fontSize: '11px', marginBottom: '6px', display: 'block' }}
+                >
                   {t('presetName', uiLanguage)}
                 </label>
                 <input
@@ -379,7 +426,10 @@ const NumberDrawPage: React.FC<{
 
               <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
                 <div style={{ flex: 1 }}>
-                  <label className="label-lg" style={{ fontSize: '11px', marginBottom: '6px', display: 'block' }}>
+                  <label
+                    className="label-lg"
+                    style={{ fontSize: '11px', marginBottom: '6px', display: 'block' }}
+                  >
                     MIN
                   </label>
                   <input
@@ -390,7 +440,10 @@ const NumberDrawPage: React.FC<{
                   />
                 </div>
                 <div style={{ flex: 1 }}>
-                  <label className="label-lg" style={{ fontSize: '11px', marginBottom: '6px', display: 'block' }}>
+                  <label
+                    className="label-lg"
+                    style={{ fontSize: '11px', marginBottom: '6px', display: 'block' }}
+                  >
                     MAX
                   </label>
                   <input
@@ -403,7 +456,10 @@ const NumberDrawPage: React.FC<{
               </div>
 
               <div>
-                <label className="label-lg" style={{ fontSize: '11px', marginBottom: '6px', display: 'block' }}>
+                <label
+                  className="label-lg"
+                  style={{ fontSize: '11px', marginBottom: '6px', display: 'block' }}
+                >
                   {t('excludedNumbers', uiLanguage)}
                 </label>
                 <input
@@ -411,19 +467,51 @@ const NumberDrawPage: React.FC<{
                   placeholder="e.g. 3, 7, 15"
                   value={activePreset.excluded}
                   onChange={(e) => updateActivePreset('excluded', e.target.value)}
-                  style={{ height: '40px' }}
+                  style={{ height: '40px', marginBottom: '16px' }}
                 />
+              </div>
+
+              {/* Duplicate Prevention Toggle */}
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  paddingTop: '12px',
+                  borderTop: '1px solid var(--border-light)'
+                }}
+              >
+                <span style={{ fontWeight: 600, fontSize: '14px', color: 'var(--neutral)' }}>
+                  {t('preventDuplicates', uiLanguage)}
+                </span>
+                <label className="toggle-switch">
+                  <input
+                    type="checkbox"
+                    checked={!!activePreset.preventDuplicates}
+                    onChange={(e) => updateActivePreset('preventDuplicates', e.target.checked)}
+                  />
+                  <span className="slider"></span>
+                </label>
               </div>
             </div>
 
-            {presets.length > 1 && (
+            <div
+              className="animate-float-up delay-350"
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginTop: '4px',
+                marginBottom: '16px'
+              }}
+            >
+              {/* Reset History Button */}
               <button
-                className="animate-float-up delay-350"
-                onClick={() => deletePreset(activePresetIndex)}
+                onClick={handleResetHistory}
                 style={{
                   background: 'transparent',
                   border: 'none',
-                  color: '#EF4444',
+                  color: 'var(--primary)',
                   fontFamily: 'var(--font-family)',
                   fontSize: '13px',
                   fontWeight: 600,
@@ -439,11 +527,39 @@ const NumberDrawPage: React.FC<{
                   style={{ width: '14px', height: '14px', fill: 'currentColor' }}
                   viewBox="0 0 24 24"
                 >
-                  <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+                  <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" />
                 </svg>
-                {t('deletePreset', uiLanguage)}
+                {t('resetHistory', uiLanguage)}
               </button>
-            )}
+
+              {presets.length > 1 && (
+                <button
+                  onClick={() => deletePreset(activePresetIndex)}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: '#EF4444',
+                    fontFamily: 'var(--font-family)',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    padding: '8px 0',
+                    textAlign: 'right',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <svg
+                    style={{ width: '14px', height: '14px', fill: 'currentColor' }}
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+                  </svg>
+                  {t('deletePreset', uiLanguage)}
+                </button>
+              )}
+            </div>
 
             <div className="animate-float-up delay-500" style={{ marginTop: 'auto' }}>
               <p style={{ fontSize: '13px', opacity: 0.5, fontStyle: 'italic', lineHeight: 1.6 }}>

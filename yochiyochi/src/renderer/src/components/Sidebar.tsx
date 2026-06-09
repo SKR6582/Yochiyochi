@@ -68,13 +68,21 @@ const Sidebar: React.FC<SidebarProps> = ({
         </h2>
         <p
           className="label-lg animate-float-up delay-100"
-          style={{ color: 'var(--neutral)', opacity: 0.7, marginBottom: '24px', paddingLeft: '24px' }}
+          style={{
+            color: 'var(--neutral)',
+            opacity: 0.7,
+            marginBottom: '24px',
+            paddingLeft: '24px'
+          }}
         >
           {t('learningPanel', uiLanguage)}
         </p>
 
         {/* ── 문자 종류 (SCRIPT) ── */}
-        <p className="label-lg animate-float-up delay-200" style={{ marginBottom: '8px', paddingLeft: '24px' }}>
+        <p
+          className="label-lg animate-float-up delay-200"
+          style={{ marginBottom: '8px', paddingLeft: '24px' }}
+        >
           {t('scriptType', uiLanguage)}
         </p>
         <div className="segmented-control animate-float-up delay-200">
@@ -94,7 +102,10 @@ const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* ── 학습 범위 (RANGE) ── */}
-        <p className="label-lg animate-float-up delay-300" style={{ marginBottom: '8px', paddingLeft: '24px' }}>
+        <p
+          className="label-lg animate-float-up delay-300"
+          style={{ marginBottom: '8px', paddingLeft: '24px' }}
+        >
           {t('range', uiLanguage)}
         </p>
         <div
@@ -103,20 +114,35 @@ const Sidebar: React.FC<SidebarProps> = ({
         >
           <ToggleRow label={t('seion', uiLanguage)} checked={useSeion} onChange={setUseSeion} />
           <ToggleRow label={t('dakuon', uiLanguage)} checked={useDakuon} onChange={setUseDakuon} />
-          <ToggleRow label={t('handakuon', uiLanguage)} checked={useHandakuon} onChange={setUseHandakuon} />
+          <ToggleRow
+            label={t('handakuon', uiLanguage)}
+            checked={useHandakuon}
+            onChange={setUseHandakuon}
+          />
           <ToggleRow label={t('yoon', uiLanguage)} checked={useYoon} onChange={setUseYoon} />
         </div>
 
         {/* ── 표시 옵션 (DISPLAY) ── */}
-        <p className="label-lg animate-float-up delay-400" style={{ marginBottom: '8px', paddingLeft: '24px' }}>
+        <p
+          className="label-lg animate-float-up delay-400"
+          style={{ marginBottom: '8px', paddingLeft: '24px' }}
+        >
           {t('displayOptions', uiLanguage)}
         </p>
         <div
           className="card animate-float-up delay-400"
           style={{ padding: '8px 24px', marginBottom: '24px' }}
         >
-          <ToggleRow label={t('showRomaji', uiLanguage)} checked={showRomaji} onChange={setShowRomaji} />
-          <ToggleRow label={t('preventDuplicates', uiLanguage)} checked={preventDuplicates} onChange={setPreventDuplicates} />
+          <ToggleRow
+            label={t('showRomaji', uiLanguage)}
+            checked={showRomaji}
+            onChange={setShowRomaji}
+          />
+          <ToggleRow
+            label={t('preventDuplicates', uiLanguage)}
+            checked={preventDuplicates}
+            onChange={setPreventDuplicates}
+          />
         </div>
 
         {/* TIP */}

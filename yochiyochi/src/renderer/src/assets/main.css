@@ -1,4 +1,4 @@
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css");
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
 @import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@600&display=swap');
 
 :root {
@@ -219,8 +219,8 @@ button:active {
   box-shadow: 0 2px 6px rgba(0, 108, 73, 0.15);
 }
 
-input[type="number"],
-input[type="text"] {
+input[type='number'],
+input[type='text'] {
   font-family: var(--font-body);
   height: 48px;
   background-color: var(--background);
@@ -229,11 +229,13 @@ input[type="text"] {
   border-radius: var(--radius-sm);
   font-size: 16px;
   width: 100%;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
-input[type="number"]:focus,
-input[type="text"]:focus {
+input[type='number']:focus,
+input[type='text']:focus {
   outline: none;
   border: 1px solid var(--primary-container);
   box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
@@ -244,7 +246,10 @@ input[type="text"]:focus {
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
   padding: 24px;
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    transform 0.2s;
 }
 
 .card:hover {
@@ -273,27 +278,27 @@ input[type="text"]:focus {
   right: 0;
   bottom: 0;
   background-color: #cbd5e1;
-  transition: .4s;
+  transition: 0.4s;
   border-radius: 24px;
 }
 
 .slider:before {
   position: absolute;
-  content: "";
+  content: '';
   height: 18px;
   width: 18px;
   left: 3px;
   bottom: 3px;
   background-color: white;
-  transition: .4s;
+  transition: 0.4s;
   border-radius: 50%;
 }
 
-input:checked+.slider {
+input:checked + .slider {
   background-color: var(--primary);
 }
 
-input:checked+.slider:before {
+input:checked + .slider:before {
   transform: translateX(24px);
 }
 
@@ -310,7 +315,7 @@ input:checked+.slider:before {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #ECEEF2;
+  background-color: #eceef2;
   position: relative;
 }
 

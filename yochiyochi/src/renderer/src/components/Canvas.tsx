@@ -10,7 +10,13 @@ type CanvasProps = {
   recentHistory: { char: string; romaji: string; type: string }[]
 }
 
-const Canvas: React.FC<CanvasProps> = ({ character, errorMessage, showRomaji, uiLanguage, recentHistory }) => {
+const Canvas: React.FC<CanvasProps> = ({
+  character,
+  errorMessage,
+  showRomaji,
+  uiLanguage,
+  recentHistory
+}) => {
   const [animKey, setAnimKey] = useState(0)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const [isDrawing, setIsDrawing] = useState(false)
@@ -19,7 +25,7 @@ const Canvas: React.FC<CanvasProps> = ({ character, errorMessage, showRomaji, ui
     setAnimKey((prev) => prev + 1)
   }, [character])
 
-  const getCoords = (e: React.MouseEvent | React.TouchEvent) => {
+  const getCoords = (e: React.MouseEvent | React.TouchEvent): { x: number; y: number } => {
     const canvas = canvasRef.current
     if (!canvas) return { x: 0, y: 0 }
     const rect = canvas.getBoundingClientRect()
@@ -30,7 +36,7 @@ const Canvas: React.FC<CanvasProps> = ({ character, errorMessage, showRomaji, ui
     return { x, y }
   }
 
-  const startDrawing = (e: React.MouseEvent | React.TouchEvent) => {
+  const startDrawing = (e: React.MouseEvent | React.TouchEvent): void => {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
@@ -43,11 +49,12 @@ const Canvas: React.FC<CanvasProps> = ({ character, errorMessage, showRomaji, ui
     ctx.lineWidth = 8
     ctx.lineCap = 'round'
     ctx.lineJoin = 'round'
-    const activeColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#006c49'
+    const activeColor =
+      getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#006c49'
     ctx.strokeStyle = activeColor
   }
 
-  const draw = (e: React.MouseEvent | React.TouchEvent) => {
+  const draw = (e: React.MouseEvent | React.TouchEvent): void => {
     if (!isDrawing) return
     const canvas = canvasRef.current
     if (!canvas) return
@@ -63,11 +70,11 @@ const Canvas: React.FC<CanvasProps> = ({ character, errorMessage, showRomaji, ui
     ctx.stroke()
   }
 
-  const stopDrawing = () => {
+  const stopDrawing = (): void => {
     setIsDrawing(false)
   }
 
-  const clearCanvas = (e: React.MouseEvent) => {
+  const clearCanvas = (e: React.MouseEvent): void => {
     e.stopPropagation()
     const canvas = canvasRef.current
     if (!canvas) return
@@ -82,11 +89,14 @@ const Canvas: React.FC<CanvasProps> = ({ character, errorMessage, showRomaji, ui
         key={animKey}
         className="animate-float-up delay-100"
         style={{
-          width: '460px',
-          height: '460px',
+          width: '100%',
+          maxWidth: 'min(60vh, 460px)',
+          aspectRatio: '1 / 1',
+          containerType: 'inline-size',
           borderRadius: '32px',
           backgroundColor: '#ECEEF2',
-          boxShadow: '-10px -10px 20px rgba(255, 255, 255, 0.8), 10px 10px 20px rgba(0, 0, 0, 0.12)',
+          boxShadow:
+            '-10px -10px 20px rgba(255, 255, 255, 0.8), 10px 10px 20px rgba(0, 0, 0, 0.12)',
           border: '1px solid rgba(255, 255, 255, 0.5)',
           display: 'flex',
           flexDirection: 'column',
@@ -99,11 +109,11 @@ const Canvas: React.FC<CanvasProps> = ({ character, errorMessage, showRomaji, ui
           <>
             <div
               className="display-xl"
-              style={{ fontSize: '64px', marginBottom: '16px', opacity: 0.3 }}
+              style={{ fontSize: '14cqw', marginBottom: '4cqw', opacity: 0.3 }}
             >
               ⚠
             </div>
-            <p className="body-lg" style={{ opacity: 0.6 }}>
+            <p className="body-lg" style={{ fontSize: '3.5cqw', opacity: 0.6 }}>
               {t(errorMessage, uiLanguage)}
             </p>
           </>
@@ -114,10 +124,10 @@ const Canvas: React.FC<CanvasProps> = ({ character, errorMessage, showRomaji, ui
               onClick={clearCanvas}
               style={{
                 position: 'absolute',
-                top: '24px',
-                right: '24px',
-                width: '36px',
-                height: '36px',
+                top: '5cqw',
+                right: '5cqw',
+                width: '8cqw',
+                height: '8cqw',
                 borderRadius: '50%',
                 backgroundColor: 'rgba(255, 255, 255, 0.9)',
                 border: '1px solid var(--border-light)',
@@ -131,7 +141,18 @@ const Canvas: React.FC<CanvasProps> = ({ character, errorMessage, showRomaji, ui
               }}
               title="지우기 (Clear)"
             >
-              <svg style={{ width: '18px', height: '18px', fill: 'none', stroke: 'var(--neutral)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' }} viewBox="0 0 24 24">
+              <svg
+                style={{
+                  width: '50%',
+                  height: '50%',
+                  fill: 'none',
+                  stroke: 'var(--neutral)',
+                  strokeWidth: 2,
+                  strokeLinecap: 'round',
+                  strokeLinejoin: 'round'
+                }}
+                viewBox="0 0 24 24"
+              >
                 <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
               </svg>
             </button>
@@ -166,10 +187,10 @@ const Canvas: React.FC<CanvasProps> = ({ character, errorMessage, showRomaji, ui
               <span
                 style={{
                   position: 'absolute',
-                  top: '32px',
+                  top: '7cqw',
                   color: 'var(--primary)',
                   fontWeight: 900,
-                  fontSize: '32px',
+                  fontSize: '7cqw',
                   letterSpacing: '0.05em'
                 }}
               >
@@ -177,16 +198,18 @@ const Canvas: React.FC<CanvasProps> = ({ character, errorMessage, showRomaji, ui
               </span>
             )}
 
-            <div style={{ display: 'flex', alignItems: 'flex-end', transform: 'translateY(40px)' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-end', transform: 'translateY(8cqw)' }}>
               {character && character.char.length >= 2 ? (
                 <>
-                  <span className="display-xl" style={{ fontSize: '340px', lineHeight: '310px' }}>{character.char[0]}</span>
-                  <span className="display-xl" style={{ fontSize: '200px', lineHeight: '310px' }}>
+                  <span className="display-xl" style={{ fontSize: '54cqw', lineHeight: '67cqw' }}>
+                    {character.char[0]}
+                  </span>
+                  <span className="display-xl" style={{ fontSize: '38cqw', lineHeight: '67cqw' }}>
                     {character.char[1]}
                   </span>
                 </>
               ) : (
-                <span className="display-xl" style={{ fontSize: '340px', lineHeight: '310px' }}>
+                <span className="display-xl" style={{ fontSize: '74cqw', lineHeight: '67cqw' }}>
                   {character ? character.char : '?'}
                 </span>
               )}
@@ -208,7 +231,16 @@ const Canvas: React.FC<CanvasProps> = ({ character, errorMessage, showRomaji, ui
             gap: '8px'
           }}
         >
-          <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--neutral)', opacity: 0.35, marginRight: '4px', letterSpacing: '-0.02em' }}>
+          <span
+            style={{
+              fontSize: '11px',
+              fontWeight: 700,
+              color: 'var(--neutral)',
+              opacity: 0.35,
+              marginRight: '4px',
+              letterSpacing: '-0.02em'
+            }}
+          >
             RECENT
           </span>
           {recentHistory.map((item, idx) => (
@@ -224,13 +256,21 @@ const Canvas: React.FC<CanvasProps> = ({ character, errorMessage, showRomaji, ui
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '3px 3px 8px rgba(11, 28, 48, 0.02), -3px -3px 8px rgba(255, 255, 255, 0.8)',
+                boxShadow:
+                  '3px 3px 8px rgba(11, 28, 48, 0.02), -3px -3px 8px rgba(255, 255, 255, 0.8)',
                 padding: 0,
                 cursor: 'default'
               }}
               title={item.romaji.toUpperCase()}
             >
-              <span style={{ fontSize: '15px', fontWeight: 800, color: 'var(--neutral)', lineHeight: 1 }}>
+              <span
+                style={{
+                  fontSize: '15px',
+                  fontWeight: 800,
+                  color: 'var(--neutral)',
+                  lineHeight: 1
+                }}
+              >
                 {item.char}
               </span>
             </div>

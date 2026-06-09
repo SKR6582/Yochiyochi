@@ -53,31 +53,41 @@ const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose, uiLanguage }) =>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>
-            <h3 className="label-lg" style={{ color: 'var(--primary)', marginBottom: '4px' }}>Lessons</h3>
+            <h3 className="label-lg" style={{ color: 'var(--primary)', marginBottom: '4px' }}>
+              Lessons
+            </h3>
             <p className="body-lg" style={{ opacity: 0.8, lineHeight: 1.5 }}>
               {t('helpLessons', uiLanguage)}
             </p>
           </div>
           <div>
-            <h3 className="label-lg" style={{ color: 'var(--primary)', marginBottom: '4px' }}>{t('whiteboard', uiLanguage)}</h3>
+            <h3 className="label-lg" style={{ color: 'var(--primary)', marginBottom: '4px' }}>
+              {t('whiteboard', uiLanguage)}
+            </h3>
             <p className="body-lg" style={{ opacity: 0.8, lineHeight: 1.5 }}>
               {t('helpWhiteboard', uiLanguage)}
             </p>
           </div>
           <div>
-            <h3 className="label-lg" style={{ color: 'var(--primary)', marginBottom: '4px' }}>{t('history', uiLanguage)}</h3>
+            <h3 className="label-lg" style={{ color: 'var(--primary)', marginBottom: '4px' }}>
+              {t('history', uiLanguage)}
+            </h3>
             <p className="body-lg" style={{ opacity: 0.8, lineHeight: 1.5 }}>
               {t('helpHistory', uiLanguage)}
             </p>
           </div>
           <div>
-            <h3 className="label-lg" style={{ color: 'var(--primary)', marginBottom: '4px' }}>{t('number', uiLanguage)}</h3>
+            <h3 className="label-lg" style={{ color: 'var(--primary)', marginBottom: '4px' }}>
+              {t('number', uiLanguage)}
+            </h3>
             <p className="body-lg" style={{ opacity: 0.8, lineHeight: 1.5 }}>
               {t('helpNumber', uiLanguage)}
             </p>
           </div>
           <div>
-            <h3 className="label-lg" style={{ color: 'var(--primary)', marginBottom: '4px' }}>{t('cards', uiLanguage)}</h3>
+            <h3 className="label-lg" style={{ color: 'var(--primary)', marginBottom: '4px' }}>
+              {t('cards', uiLanguage)}
+            </h3>
             <p className="body-lg" style={{ opacity: 0.8, lineHeight: 1.5 }}>
               {t('helpCards', uiLanguage)}
             </p>
@@ -85,11 +95,30 @@ const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose, uiLanguage }) =>
 
           <hr style={{ border: 0, borderTop: '1px dashed var(--border-light)', margin: '8px 0' }} />
 
-          <div style={{ backgroundColor: 'var(--surface-container-low)', padding: '12px 16px', borderRadius: '12px' }}>
-            <h4 className="label-lg" style={{ color: 'var(--neutral)', marginBottom: '6px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div
+            style={{
+              backgroundColor: 'var(--surface-container-low)',
+              padding: '12px 16px',
+              borderRadius: '12px'
+            }}
+          >
+            <h4
+              className="label-lg"
+              style={{
+                color: 'var(--neutral)',
+                marginBottom: '6px',
+                fontSize: '13px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
               ⌨️ {t('helpHotkeysTitle', uiLanguage)}
             </h4>
-            <p className="body-sm" style={{ opacity: 0.7, lineHeight: 1.6, fontSize: '12px', whiteSpace: 'pre-line' }}>
+            <p
+              className="body-sm"
+              style={{ opacity: 0.7, lineHeight: 1.6, fontSize: '12px', whiteSpace: 'pre-line' }}
+            >
               {t('helpHotkeys', uiLanguage)}
             </p>
           </div>

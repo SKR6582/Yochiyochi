@@ -28,25 +28,33 @@ type Stroke = {
 }
 
 // Helper: Calculate shortest distance from point P to line segment AB
-function distanceToSegment(p: { x: number; y: number }, a: { x: number; y: number }, b: { x: number; y: number }): number {
+function distanceToSegment(
+  p: { x: number; y: number },
+  a: { x: number; y: number },
+  b: { x: number; y: number }
+): number {
   const dx = b.x - a.x
   const dy = b.y - a.y
-  
+
   if (dx === 0 && dy === 0) {
     return Math.hypot(p.x - a.x, p.y - a.y)
   }
-  
+
   let t = ((p.x - a.x) * dx + (p.y - a.y) * dy) / (dx * dx + dy * dy)
   t = Math.max(0, Math.min(1, t))
-  
+
   const projX = a.x + t * dx
   const projY = a.y + t * dy
-  
+
   return Math.hypot(p.x - projX, p.y - projY)
 }
 
 // Tool 1: Premium Pencil / Pen with Wood neck and Lead tip
-const PenTool: React.FC<{ isActive: boolean; color: string; onClick: () => void }> = ({ isActive, color, onClick }) => {
+const PenTool: React.FC<{ isActive: boolean; color: string; onClick: () => void }> = ({
+  isActive,
+  color,
+  onClick
+}) => {
   return (
     <div
       onClick={onClick}
@@ -92,7 +100,8 @@ const PenTool: React.FC<{ isActive: boolean; color: string; onClick: () => void 
           height: '66px',
           backgroundColor: '#2C2C2E', // Matte dark grey body
           borderRadius: '0 0 4px 4px',
-          boxShadow: 'inset 3px 0 3px rgba(255,255,255,0.05), inset -3px 0 3px rgba(0,0,0,0.4), 0 4px 8px rgba(0,0,0,0.2)',
+          boxShadow:
+            'inset 3px 0 3px rgba(255,255,255,0.05), inset -3px 0 3px rgba(0,0,0,0.4), 0 4px 8px rgba(0,0,0,0.2)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -128,7 +137,10 @@ const PenTool: React.FC<{ isActive: boolean; color: string; onClick: () => void 
 }
 
 // Tool 2: Pink Block Eraser
-const EraserTool: React.FC<{ isActive: boolean; onClick: () => void }> = ({ isActive, onClick }) => {
+const EraserTool: React.FC<{ isActive: boolean; onClick: () => void }> = ({
+  isActive,
+  onClick
+}) => {
   return (
     <div
       onClick={onClick}
@@ -151,7 +163,8 @@ const EraserTool: React.FC<{ isActive: boolean; onClick: () => void }> = ({ isAc
           backgroundColor: '#FF8A9A', // Premium rubber pink
           borderRadius: '4px 4px 0 0',
           borderBottom: '2px solid #E15B70',
-          boxShadow: 'inset 3px 3px 3px rgba(255,255,255,0.3), inset -3px -3px 3px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.1)'
+          boxShadow:
+            'inset 3px 3px 3px rgba(255,255,255,0.3), inset -3px -3px 3px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.1)'
         }}
       />
       {/* Eraser Sleeve */}
@@ -161,7 +174,8 @@ const EraserTool: React.FC<{ isActive: boolean; onClick: () => void }> = ({ isAc
           height: '62px',
           backgroundColor: '#F2F2F7',
           borderRadius: '0 0 4px 4px',
-          boxShadow: 'inset 3px 0 3px rgba(255,255,255,0.5), inset -3px 0 3px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.2)',
+          boxShadow:
+            'inset 3px 0 3px rgba(255,255,255,0.5), inset -3px 0 3px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.2)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -170,8 +184,27 @@ const EraserTool: React.FC<{ isActive: boolean; onClick: () => void }> = ({ isAc
         }}
       >
         {/* Sleeve Accent Strip */}
-        <div style={{ width: '100%', height: '4px', backgroundColor: '#3B82F6', position: 'absolute', top: '8px' }} />
-        <span style={{ fontSize: '7px', color: '#8E8E93', fontWeight: 800, transform: 'rotate(-90deg)', whiteSpace: 'nowrap', letterSpacing: '0.1em' }}>ERASER</span>
+        <div
+          style={{
+            width: '100%',
+            height: '4px',
+            backgroundColor: '#3B82F6',
+            position: 'absolute',
+            top: '8px'
+          }}
+        />
+        <span
+          style={{
+            fontSize: '7px',
+            color: '#8E8E93',
+            fontWeight: 800,
+            transform: 'rotate(-90deg)',
+            whiteSpace: 'nowrap',
+            letterSpacing: '0.1em'
+          }}
+        >
+          ERASER
+        </span>
       </div>
     </div>
   )
@@ -192,7 +225,7 @@ const WhiteboardPage: React.FC<WhiteboardPageProps> = ({ uiLanguage, themeColor,
   const [activeTool, setActiveTool] = useState<ToolType>('pen')
   const [selectedColor, setSelectedColor] = useState<string>('#0B1C30')
   const [thicknessLevel, setThicknessLevel] = useState<ThicknessLevel>('medium')
-  
+
   const [showGuide, setShowGuide] = useState(true)
   const [confirmClear, setConfirmClear] = useState(false)
 
@@ -205,7 +238,11 @@ const WhiteboardPage: React.FC<WhiteboardPageProps> = ({ uiLanguage, themeColor,
 
   const getDisplayColor = () => {
     if (selectedColor.startsWith('var(')) {
-      return themeColor || getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#006c49'
+      return (
+        themeColor ||
+        getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() ||
+        '#006c49'
+      )
     }
     return selectedColor
   }
@@ -243,10 +280,10 @@ const WhiteboardPage: React.FC<WhiteboardPageProps> = ({ uiLanguage, themeColor,
     strokesRef.current.forEach((stroke) => {
       if (stroke.points.length === 0) return
       ctx.beginPath()
-      
+
       const first = stroke.points[0]
       ctx.moveTo(first.x, first.y)
-      
+
       for (let i = 1; i < stroke.points.length; i++) {
         const pt = stroke.points[i]
         ctx.lineTo(pt.x, pt.y)
@@ -259,7 +296,7 @@ const WhiteboardPage: React.FC<WhiteboardPageProps> = ({ uiLanguage, themeColor,
         ctx.globalCompositeOperation = 'source-over'
         ctx.strokeStyle = stroke.color
       }
-      
+
       ctx.lineWidth = stroke.thickness
       ctx.lineCap = 'round'
       ctx.lineJoin = 'round'
@@ -279,7 +316,7 @@ const WhiteboardPage: React.FC<WhiteboardPageProps> = ({ uiLanguage, themeColor,
       cursor.style.width = `${size}px`
       cursor.style.height = `${size}px`
       cursor.style.display = 'block'
-      
+
       const canvas = canvasRef.current
       if (canvas) {
         canvas.style.cursor = 'none'
@@ -330,7 +367,7 @@ const WhiteboardPage: React.FC<WhiteboardPageProps> = ({ uiLanguage, themeColor,
     const resizeCanvas = () => {
       const rect = container.getBoundingClientRect()
       if (rect.width === 0 || rect.height === 0) return // Skip resizing when hidden
-      
+
       const dpr = window.devicePixelRatio || 1
       canvas.width = rect.width * dpr
       canvas.height = rect.height * dpr
@@ -370,15 +407,15 @@ const WhiteboardPage: React.FC<WhiteboardPageProps> = ({ uiLanguage, themeColor,
   const eraseAtPoint = (x: number, y: number) => {
     const eraserSize = getThicknessPx(thicknessLevel)
     const eraserRadius = eraserSize / 2
-    
+
     let hitDetected = false
-    
+
     strokesRef.current = strokesRef.current.filter((stroke) => {
       // Keep pixel eraser strokes in the database
       if (stroke.tool === 'eraser') return true
-      
+
       // 1. Fast bounding box check with padding
-      const padding = eraserRadius + (stroke.thickness / 2)
+      const padding = eraserRadius + stroke.thickness / 2
       if (
         x < stroke.minX - padding ||
         x > stroke.maxX + padding ||
@@ -387,7 +424,7 @@ const WhiteboardPage: React.FC<WhiteboardPageProps> = ({ uiLanguage, themeColor,
       ) {
         return true // Keep this stroke
       }
-      
+
       // 2. Precise distance check for each segment
       for (let i = 0; i < stroke.points.length - 1; i++) {
         const dist = distanceToSegment({ x, y }, stroke.points[i], stroke.points[i + 1])
@@ -396,10 +433,10 @@ const WhiteboardPage: React.FC<WhiteboardPageProps> = ({ uiLanguage, themeColor,
           return false // Delete this stroke (collision detected!)
         }
       }
-      
+
       return true // Keep
     })
-    
+
     if (hitDetected) {
       redrawCanvas()
     }
@@ -418,7 +455,7 @@ const WhiteboardPage: React.FC<WhiteboardPageProps> = ({ uiLanguage, themeColor,
 
     // Right-click drawing acts as OBJECT ERASER!
     const isRightClick = 'button' in e && e.button === 2
-    
+
     // Determine eraser behavior:
     // Right-click -> isErasingModeRef (object eraser, removes entire stroke)
     // Toolbar eraser -> draws a pixel-eraser stroke (destination-out)
@@ -496,7 +533,7 @@ const WhiteboardPage: React.FC<WhiteboardPageProps> = ({ uiLanguage, themeColor,
         stroke.maxX = Math.max(stroke.maxX, x)
         stroke.minY = Math.min(stroke.minY, y)
         stroke.maxY = Math.max(stroke.maxY, y)
-        
+
         ctx.lineTo(x, y)
         ctx.stroke()
       }
@@ -597,7 +634,9 @@ const WhiteboardPage: React.FC<WhiteboardPageProps> = ({ uiLanguage, themeColor,
           position: 'absolute',
           bottom: '148px', // directly above the toolbar
           left: '50%',
-          transform: showGuide ? 'translateX(-50%) translateY(0)' : 'translateX(-50%) translateY(12px)',
+          transform: showGuide
+            ? 'translateX(-50%) translateY(0)'
+            : 'translateX(-50%) translateY(12px)',
           backgroundColor: 'rgba(15, 23, 42, 0.85)',
           backdropFilter: 'blur(8px)',
           padding: '10px 20px',
@@ -655,13 +694,36 @@ const WhiteboardPage: React.FC<WhiteboardPageProps> = ({ uiLanguage, themeColor,
         }}
       >
         {/* Tools Section */}
-        <div style={{ display: 'flex', alignItems: 'flex-end', gap: '22px', borderRight: '1px solid rgba(0, 0, 0, 0.08)', paddingRight: '24px', height: '100%' }}>
-          <PenTool isActive={activeTool === 'pen'} color={getDisplayColor()} onClick={() => setActiveTool('pen')} />
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'flex-end',
+            gap: '22px',
+            borderRight: '1px solid rgba(0, 0, 0, 0.08)',
+            paddingRight: '24px',
+            height: '100%'
+          }}
+        >
+          <PenTool
+            isActive={activeTool === 'pen'}
+            color={getDisplayColor()}
+            onClick={() => setActiveTool('pen')}
+          />
           <EraserTool isActive={activeTool === 'eraser'} onClick={() => setActiveTool('eraser')} />
         </div>
 
         {/* Thickness Section */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', borderRight: '1px solid rgba(0, 0, 0, 0.08)', paddingRight: '24px', height: '100%', paddingBottom: '8px' }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '14px',
+            borderRight: '1px solid rgba(0, 0, 0, 0.08)',
+            paddingRight: '24px',
+            height: '100%',
+            paddingBottom: '8px'
+          }}
+        >
           {(['thin', 'medium', 'thick'] as const).map((level) => {
             const isSelected = thicknessLevel === level
             const dotSize = level === 'thin' ? 4 : level === 'medium' ? 8 : 14
@@ -689,14 +751,24 @@ const WhiteboardPage: React.FC<WhiteboardPageProps> = ({ uiLanguage, themeColor,
                 title={`Thickness: ${level}`}
               >
                 {/* Visual Dot Preview Container */}
-                <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', height: '24px' }}>
+                <div
+                  style={{
+                    flex: 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: '24px'
+                  }}
+                >
                   <div
                     style={{
                       width: `${dotSize}px`,
                       height: `${dotSize}px`,
                       borderRadius: '50%',
                       backgroundColor: isSelected ? getDisplayColor() : '#8E8E93',
-                      boxShadow: isSelected ? `0 0 4px ${hexToRgba(getDisplayColor(), 0.3)}` : 'none',
+                      boxShadow: isSelected
+                        ? `0 0 4px ${hexToRgba(getDisplayColor(), 0.3)}`
+                        : 'none',
                       transition: 'all 0.2s ease'
                     }}
                   />
@@ -718,11 +790,23 @@ const WhiteboardPage: React.FC<WhiteboardPageProps> = ({ uiLanguage, themeColor,
         </div>
 
         {/* Color Palette Section (3D Recessed Well Buttons with Checkmarks) */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', borderRight: '1px solid rgba(0, 0, 0, 0.08)', paddingRight: '24px', height: '100%', paddingBottom: '8px' }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            borderRight: '1px solid rgba(0, 0, 0, 0.08)',
+            paddingRight: '24px',
+            height: '100%',
+            paddingBottom: '8px'
+          }}
+        >
           {colors.map((color) => {
             const isSelected = selectedColor === color.value
             const colorVal = color.value.startsWith('var(')
-              ? themeColor || getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#006c49'
+              ? themeColor ||
+                getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() ||
+                '#006c49'
               : color.value
             return (
               <div
@@ -765,7 +849,10 @@ const WhiteboardPage: React.FC<WhiteboardPageProps> = ({ uiLanguage, themeColor,
                       style={{
                         width: '10px',
                         height: '10px',
-                        stroke: color.name === 'Theme' && colorVal.toLowerCase() === '#ffffff' ? '#000000' : '#FFFFFF',
+                        stroke:
+                          color.name === 'Theme' && colorVal.toLowerCase() === '#ffffff'
+                            ? '#000000'
+                            : '#FFFFFF',
                         strokeWidth: 4,
                         fill: 'none',
                         strokeLinecap: 'round',
@@ -782,7 +869,9 @@ const WhiteboardPage: React.FC<WhiteboardPageProps> = ({ uiLanguage, themeColor,
         </div>
 
         {/* Clear Button Section with Confirmation Protection */}
-        <div style={{ height: '100%', display: 'flex', alignItems: 'center', paddingBottom: '8px' }}>
+        <div
+          style={{ height: '100%', display: 'flex', alignItems: 'center', paddingBottom: '8px' }}
+        >
           <button
             onClick={() => {
               if (confirmClear) {

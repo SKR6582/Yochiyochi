@@ -53,14 +53,7 @@ app.whenReady().then(() => {
 
   // ── IPC API: draw-character ──
   ipcMain.handle('draw-character', (_event, options) => {
-    const {
-      useSeion,
-      useDakuon,
-      useHandakuon,
-      useYoon,
-      preventDuplicates,
-      scriptType
-    } = options
+    const { useSeion, useDakuon, useHandakuon, useYoon, preventDuplicates, scriptType } = options
 
     // Helper to add variants based on scriptType
     const addChars = (source: { char: string; romaji: string }[], typeName: string) => {

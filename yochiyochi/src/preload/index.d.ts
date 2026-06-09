@@ -25,7 +25,13 @@ declare global {
     api: {
       drawCharacter: (
         options: DrawOptions
-      ) => Promise<{ char: string; romaji: string; type: string; error: string | null; message?: string }>
+      ) => Promise<{
+        char: string
+        romaji: string
+        type: string
+        error: string | null
+        message?: string
+      }>
       resetHistory: () => Promise<{ success: boolean }>
       loadConfig: () => Promise<any>
       saveConfig: (config: any) => Promise<{ success: boolean }>

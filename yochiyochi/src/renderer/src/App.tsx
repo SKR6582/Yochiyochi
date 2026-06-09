@@ -22,7 +22,8 @@ type HistoryEntry = CharacterEntry & {
 }
 
 function App(): React.JSX.Element {
-  const isSettingsWindow = window.location.hash.includes('settings') || window.location.search.includes('settings')
+  const isSettingsWindow =
+    window.location.hash.includes('settings') || window.location.search.includes('settings')
 
   if (isSettingsWindow) {
     return <SettingsPage />
@@ -31,7 +32,9 @@ function App(): React.JSX.Element {
   const [currentPage, setCurrentPage] = useState('lessons')
   const [isHelpOpen, setIsHelpOpen] = useState(false)
   const [uiLanguage, setUiLanguage] = useState<UiLanguage>('ko')
-  const [numberDrawHistory, setNumberDrawHistory] = useState<Record<string, Record<number, number>>>({})
+  const [numberDrawHistory, setNumberDrawHistory] = useState<
+    Record<string, Record<number, number>>
+  >({})
   const [themeColor, setThemeColor] = useState<string>('#006c49')
   const [isConfigLoaded, setIsConfigLoaded] = useState(false)
 
@@ -57,12 +60,16 @@ function App(): React.JSX.Element {
       if (typeof config.useDakuon === 'boolean') setUseDakuon(config.useDakuon)
       if (typeof config.useHandakuon === 'boolean') setUseHandakuon(config.useHandakuon)
       if (typeof config.useYoon === 'boolean') setUseYoon(config.useYoon)
-      if (typeof config.preventDuplicates === 'boolean') setPreventDuplicates(config.preventDuplicates)
+      if (typeof config.preventDuplicates === 'boolean')
+        setPreventDuplicates(config.preventDuplicates)
       if (typeof config.showRomaji === 'boolean') setShowRomaji(config.showRomaji)
       if (config.themeColor) {
         setThemeColor(config.themeColor)
         document.documentElement.style.setProperty('--primary', config.themeColor)
-        document.documentElement.style.setProperty('--primary-container', config.themeColorContainer || config.themeColor)
+        document.documentElement.style.setProperty(
+          '--primary-container',
+          config.themeColorContainer || config.themeColor
+        )
       }
       setIsConfigLoaded(true)
     })
@@ -75,7 +82,10 @@ function App(): React.JSX.Element {
       if (newConfig.themeColor) {
         setThemeColor(newConfig.themeColor)
         document.documentElement.style.setProperty('--primary', newConfig.themeColor)
-        document.documentElement.style.setProperty('--primary-container', newConfig.themeColorContainer || newConfig.themeColor)
+        document.documentElement.style.setProperty(
+          '--primary-container',
+          newConfig.themeColorContainer || newConfig.themeColor
+        )
       }
     })
     return () => removeListener()
@@ -249,17 +259,26 @@ function App(): React.JSX.Element {
         />
       )}
 
-      {currentPage === 'cards' && <CardListPage onSelect={handleSelectFromCard} uiLanguage={uiLanguage} />}
+      {currentPage === 'cards' && (
+        <CardListPage onSelect={handleSelectFromCard} uiLanguage={uiLanguage} />
+      )}
 
-      <div style={{ display: currentPage === 'whiteboard' ? 'flex' : 'none', flex: 1, flexDirection: 'column', overflow: 'hidden' }}>
-        <WhiteboardPage uiLanguage={uiLanguage} themeColor={themeColor} isActive={currentPage === 'whiteboard'} />
+      <div
+        style={{
+          display: currentPage === 'whiteboard' ? 'flex' : 'none',
+          flex: 1,
+          flexDirection: 'column',
+          overflow: 'hidden'
+        }}
+      >
+        <WhiteboardPage
+          uiLanguage={uiLanguage}
+          themeColor={themeColor}
+          isActive={currentPage === 'whiteboard'}
+        />
       </div>
 
-      <HelpModal
-        isOpen={isHelpOpen}
-        onClose={() => setIsHelpOpen(false)}
-        uiLanguage={uiLanguage}
-      />
+      <HelpModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} uiLanguage={uiLanguage} />
     </>
   )
 }

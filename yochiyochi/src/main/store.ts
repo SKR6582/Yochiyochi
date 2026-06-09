@@ -15,9 +15,9 @@ const DEFAULT_CONFIG = {
   showRomaji: true,
   showExample: true,
   presets: [
-    { name: '1반', min: '1', max: '30', excluded: '' },
-    { name: '2반', min: '1', max: '28', excluded: '' },
-    { name: '3반', min: '1', max: '32', excluded: '' }
+    { name: '1반', min: '1', max: '30', excluded: '', preventDuplicates: false },
+    { name: '2반', min: '1', max: '28', excluded: '', preventDuplicates: false },
+    { name: '3반', min: '1', max: '32', excluded: '', preventDuplicates: false }
   ]
 }
 

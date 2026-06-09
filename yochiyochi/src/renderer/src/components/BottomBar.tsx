@@ -11,9 +11,21 @@ const BottomBar: React.FC<BottomBarProps> = ({ onDraw, uiLanguage }) => {
   const renderButtonText = () => {
     if (uiLanguage === 'ko') {
       return (
-        <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+        <span
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+        >
           <span style={{ fontSize: '24px', fontWeight: 800 }}>뽑기</span>
-          <span style={{ fontSize: '13px', fontWeight: 500, opacity: 0.5, letterSpacing: '0.05em', transform: 'translateY(1px)' }}>DRAW</span>
+          <span
+            style={{
+              fontSize: '13px',
+              fontWeight: 500,
+              opacity: 0.5,
+              letterSpacing: '0.05em',
+              transform: 'translateY(1px)'
+            }}
+          >
+            DRAW
+          </span>
         </span>
       )
     }
@@ -22,7 +34,11 @@ const BottomBar: React.FC<BottomBarProps> = ({ onDraw, uiLanguage }) => {
 
   return (
     <footer className="bottom-bar">
-      <button className="btn-primary animate-float-up delay-300" style={{ flex: 1, height: '80px' }} onClick={onDraw}>
+      <button
+        className="btn-primary animate-float-up delay-300"
+        style={{ flex: 1, height: '80px' }}
+        onClick={onDraw}
+      >
         {renderButtonText()}
       </button>
     </footer>

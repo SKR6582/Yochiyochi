@@ -49,7 +49,10 @@ const HistoryPage: React.FC<HistoryPageProps> = ({ history, onClear, onSelect, u
         }}
       >
         <div>
-          <h2 className="headline-lg" style={{ fontSize: '28px', lineHeight: 1, marginBottom: '8px' }}>
+          <h2
+            className="headline-lg"
+            style={{ fontSize: '28px', lineHeight: 1, marginBottom: '8px' }}
+          >
             {t('drawHistory', uiLanguage)}
           </h2>
           <p className="label-lg" style={{ opacity: 0.5 }}>
@@ -70,7 +73,15 @@ const HistoryPage: React.FC<HistoryPageProps> = ({ history, onClear, onSelect, u
               borderRadius: 'var(--radius-sm)'
             }}
             onClick={() => {
-              if (confirm(uiLanguage === 'ko' ? '정말로 모든 기록을 삭제하시겠습니까?' : uiLanguage === 'ja' ? '本当にすべての履歴を削除しますか？' : 'Are you sure you want to delete all history?')) {
+              if (
+                confirm(
+                  uiLanguage === 'ko'
+                    ? '정말로 모든 기록을 삭제하시겠습니까?'
+                    : uiLanguage === 'ja'
+                      ? '本当にすべての履歴を削除しますか？'
+                      : 'Are you sure you want to delete all history?'
+                )
+              ) {
                 onClear()
               }
             }}
@@ -130,10 +141,7 @@ const HistoryPage: React.FC<HistoryPageProps> = ({ history, onClear, onSelect, u
                 <span style={{ fontSize: '36px', fontWeight: 800, marginBottom: '4px' }}>
                   {entry.char}
                 </span>
-                <span
-                  className="label-lg"
-                  style={{ color: 'var(--primary)', fontSize: '11px' }}
-                >
+                <span className="label-lg" style={{ color: 'var(--primary)', fontSize: '11px' }}>
                   {entry.romaji.toUpperCase()}
                 </span>
                 <span style={{ fontSize: '10px', opacity: 0.4, marginTop: '4px' }}>

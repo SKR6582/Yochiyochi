@@ -77,8 +77,26 @@ const SettingsPage: React.FC = () => {
         padding: '32px'
       }}
     >
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', maxWidth: '440px', margin: '0 auto', width: '100%' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-light)', paddingBottom: '16px', marginBottom: '8px' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '28px',
+          maxWidth: '440px',
+          margin: '0 auto',
+          width: '100%'
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderBottom: '1px solid var(--border-light)',
+            paddingBottom: '16px',
+            marginBottom: '8px'
+          }}
+        >
           <h1 className="headline-lg" style={{ fontSize: '26px', margin: 0 }}>
             {t('settings', uiLanguage)}
           </h1>
@@ -92,8 +110,19 @@ const SettingsPage: React.FC = () => {
         </div>
 
         {/* Language Section */}
-        <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '16px', borderRadius: 'var(--radius-lg)' }}>
-          <p className="label-lg" style={{ fontSize: '12px', color: 'var(--primary)', letterSpacing: '0.05em' }}>
+        <div
+          className="card"
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px',
+            borderRadius: 'var(--radius-lg)'
+          }}
+        >
+          <p
+            className="label-lg"
+            style={{ fontSize: '12px', color: 'var(--primary)', letterSpacing: '0.05em' }}
+          >
             {t('languageSettings', uiLanguage)}
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -127,11 +156,30 @@ const SettingsPage: React.FC = () => {
         </div>
 
         {/* Theme Settings Section */}
-        <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '16px', borderRadius: 'var(--radius-lg)' }}>
-          <p className="label-lg" style={{ fontSize: '12px', color: 'var(--primary)', letterSpacing: '0.05em' }}>
+        <div
+          className="card"
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px',
+            borderRadius: 'var(--radius-lg)'
+          }}
+        >
+          <p
+            className="label-lg"
+            style={{ fontSize: '12px', color: 'var(--primary)', letterSpacing: '0.05em' }}
+          >
             {t('themeSettings', uiLanguage)}
           </p>
-          <p style={{ fontSize: '13px', color: 'var(--neutral)', opacity: 0.6, marginTop: '-8px', marginBottom: '4px' }}>
+          <p
+            style={{
+              fontSize: '13px',
+              color: 'var(--neutral)',
+              opacity: 0.6,
+              marginTop: '-8px',
+              marginBottom: '4px'
+            }}
+          >
             {t('themeColorLabel', uiLanguage)}
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
@@ -165,7 +213,14 @@ const SettingsPage: React.FC = () => {
                       boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                     }}
                   />
-                  <span style={{ fontSize: '11px', fontWeight: 700, whiteSpace: 'nowrap', opacity: isActive ? 1 : 0.65 }}>
+                  <span
+                    style={{
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      whiteSpace: 'nowrap',
+                      opacity: isActive ? 1 : 0.65
+                    }}
+                  >
                     {preset.name}
                   </span>
                 </button>

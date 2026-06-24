@@ -1,5 +1,7 @@
 # Yochiyochi (요치요치) 🌸
 
+<img width="1624" height="1061" alt="image" src="https://github.com/user-attachments/assets/a8ee0a18-af9b-47ad-9dd6-75a8cfcf6a2f" />
+
 [![Platform macOS](https://img.shields.io/badge/platform-macOS-lightgrey.svg)]()
 [![Platform Windows](https://img.shields.io/badge/platform-Windows-blue.svg)]()
 [![Framework Electron](https://img.shields.io/badge/framework-Electron-47848F.svg)]()

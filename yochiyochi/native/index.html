@@ -1,0 +1,2338 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>yochiyochi</title>
+    <style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@600&display=swap');
+
+:root {
+  --primary: #006c49;
+  --primary-container: #10b981;
+  --on-primary: #ffffff;
+
+  --neutral: #0b1c30;
+  --background: #ffffff;
+  --surface: #f8f9ff;
+
+  --border-light: #e2e8f0;
+  --border-hover: #bbcabf;
+
+  --font-display: 'Pretendard', 'Hanken Grotesk', sans-serif;
+  --font-body: 'Pretendard', 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--background);
+  color: var(--neutral);
+  line-height: 1.6;
+  letter-spacing: -0.03em;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.page {
+  display: none;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.page.active {
+  display: flex;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Typography */
+.display-xl {
+  font-family: var(--font-display);
+  font-size: 420px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.05em;
+}
+
+.headline-lg {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+}
+
+.body-lg {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.7;
+  letter-spacing: -0.02em;
+}
+
+.label-lg {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+/* Components */
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--on-primary);
+  border: none;
+  height: 60px;
+  font-weight: 600;
+  font-size: 18px;
+  box-shadow: 0 4px 6px -1px rgba(0, 108, 73, 0.2);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-container);
+  box-shadow: 0 6px 12px -2px rgba(16, 185, 129, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: scale(0.97) !important;
+  box-shadow: inset 4px 4px 10px rgba(0, 0, 0, 0.25) !important;
+}
+
+.btn-secondary {
+  background-color: var(--background);
+  color: var(--neutral);
+  border: 1px solid var(--neutral);
+  height: 60px;
+  font-weight: 500;
+}
+
+.btn-secondary:hover {
+  background-color: var(--surface);
+  border-color: var(--neutral);
+}
+
+.btn-icon {
+  background-color: transparent;
+  border: none;
+  color: var(--neutral);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+}
+
+.btn-icon:hover {
+  background-color: var(--border-light);
+}
+
+/* Pill Button Group (Light Theme) */
+.pill-group {
+  display: flex;
+  align-items: center;
+  background-color: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: 100px;
+  padding: 4px 6px;
+  gap: 4px;
+}
+
+.pill-icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--neutral);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.pill-icon-btn:hover {
+  background-color: rgba(15, 23, 42, 0.08);
+}
+
+.pill-icon-btn svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+/* Segmented Control (Tabs) */
+.segmented-control {
+  display: flex;
+  background-color: var(--surface);
+  border: 1px solid var(--border-light);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  margin-bottom: 24px;
+  gap: 4px;
+}
+
+.segmented-control button {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--neutral);
+  opacity: 0.7;
+  font-weight: 600;
+  font-size: 14px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: -0.02em;
+}
+
+.segmented-control button:hover {
+  background-color: rgba(0, 108, 73, 0.05);
+  opacity: 0.9;
+}
+
+.segmented-control button.active {
+  background-color: var(--primary);
+  color: var(--on-primary);
+  opacity: 1;
+  box-shadow: 0 2px 6px rgba(0, 108, 73, 0.15);
+}
+
+input[type='number'],
+input[type='text'] {
+  font-family: var(--font-body);
+  height: 48px;
+  background-color: var(--background);
+  border: 1px solid var(--border-light);
+  padding: 0 16px;
+  border-radius: var(--radius-sm);
+  font-size: 16px;
+  width: 100%;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+input[type='number']:focus,
+input[type='text']:focus {
+  outline: none;
+  border: 1px solid var(--primary-container);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+.card {
+  background-color: var(--background);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    transform 0.2s;
+}
+
+.card:hover {
+  border-color: var(--border-hover);
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #cbd5e1;
+  transition: 0.4s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: '';
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+/* Layout */
+.app-container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.canvas-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #eceef2;
+  position: relative;
+}
+
+.sidebar-area {
+  width: 320px;
+  background-color: var(--background);
+  border-left: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.top-nav {
+  height: 64px;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  background: var(--background);
+  z-index: 10;
+}
+
+.bottom-bar {
+  height: 80px;
+  display: flex;
+  align-items: stretch;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-float-up {
+  opacity: 0;
+  animation: floatUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.delay-100 {
+  animation-delay: 50ms;
+}
+
+.delay-150 {
+  animation-delay: 75ms;
+}
+
+.delay-200 {
+  animation-delay: 100ms;
+}
+
+.delay-250 {
+  animation-delay: 125ms;
+}
+
+.delay-300 {
+  animation-delay: 150ms;
+}
+
+.delay-350 {
+  animation-delay: 175ms;
+}
+
+.delay-400 {
+  animation-delay: 200ms;
+}
+
+.delay-500 {
+  animation-delay: 250ms;
+}
+
+/* Navigation Tab Styles (Pill Shape Variant) */
+.nav-tab {
+  color: var(--neutral);
+  opacity: 0.6;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: 100px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+}
+
+.nav-tab:hover {
+  background-color: rgba(0, 108, 73, 0.06);
+  opacity: 0.9;
+}
+
+.nav-tab.active {
+  background-color: var(--primary);
+  color: var(--on-primary) !important;
+  opacity: 1;
+  box-shadow: 0 2px 8px rgba(0, 108, 73, 0.15);
+}
+
+/* ── Native page extras ── */
+.top-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.top-nav-brand {
+  font-size: 32px;
+  margin: 0;
+  line-height: 1;
+}
+
+.top-nav-tabs {
+  display: flex;
+  gap: 24px;
+}
+
+.char-stage {
+  width: 100%;
+  max-width: min(60vh, 460px);
+  aspect-ratio: 1 / 1;
+  container-type: inline-size;
+  border-radius: 32px;
+  background-color: #eceef2;
+  box-shadow: -10px -10px 20px rgba(255, 255, 255, 0.8), 10px 10px 20px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.char-romaji {
+  position: absolute;
+  top: 7cqw;
+  color: var(--primary);
+  font-weight: 900;
+  font-size: 7cqw;
+  letter-spacing: 0.05em;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.char-display {
+  display: flex;
+  align-items: flex-end;
+  transform: translateY(8cqw);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.char-clear-btn {
+  position: absolute;
+  top: 5cqw;
+  right: 5cqw;
+  width: 8cqw;
+  height: 8cqw;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border-light);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  z-index: 10;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.char-clear-btn svg {
+  width: 50%;
+  height: 50%;
+  fill: none;
+  stroke: var(--neutral);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.practice-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 32px;
+  cursor: crosshair;
+  z-index: 5;
+  touch-action: none;
+}
+
+.recent-tray {
+  position: absolute;
+  bottom: 24px;
+  left: 32px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.recent-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--neutral);
+  opacity: 0.35;
+  margin-right: 4px;
+  letter-spacing: -0.02em;
+}
+
+.recent-badge {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 3px 3px 8px rgba(11, 28, 48, 0.02), -3px -3px 8px rgba(255, 255, 255, 0.8);
+  padding: 0;
+}
+
+.shortcut-hint {
+  position: absolute;
+  bottom: 24px;
+  right: 32px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--neutral);
+  opacity: 0.3;
+  letter-spacing: -0.02em;
+  display: flex;
+  gap: 16px;
+}
+
+.sidebar-inner {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+}
+
+.toggle-row span {
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.03em;
+}
+
+.sidebar-tip {
+  margin-top: auto;
+  font-size: 13px;
+  opacity: 0.5;
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.page-header {
+  padding: 24px 32px;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-scroll {
+  flex: 1;
+  overflow: auto;
+  padding: 24px 32px;
+}
+
+.history-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+}
+
+.history-card {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 8px;
+  border: 1px solid var(--border-light);
+  background: var(--surface);
+}
+
+.history-card:hover {
+  border-color: var(--primary);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  opacity: 0.4;
+}
+
+.cards-layout {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.cards-main {
+  flex: 1;
+  overflow: auto;
+  padding: 24px 32px;
+}
+
+.cards-script-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 16px;
+}
+
+.script-pill {
+  padding: 8px 20px;
+  border-radius: 20px;
+  border: none;
+  background: #ecedf7;
+  color: var(--neutral);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.script-pill.active {
+  background: var(--primary);
+  color: #fff;
+}
+
+.kana-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 8px;
+}
+
+.kana-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 4px;
+  background: var(--surface);
+  color: var(--neutral);
+  border: 1px solid var(--border-light);
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.kana-card:hover {
+  border-color: var(--primary);
+}
+
+.kana-card.selected {
+  background: var(--primary);
+  color: #fff;
+  border: 2px solid var(--primary);
+}
+
+.cards-preview {
+  width: 320px;
+  border-left: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--background);
+  padding: 40px;
+}
+
+.wb-wrap {
+  flex: 1;
+  position: relative;
+  background-color: #fff;
+  background-image: radial-gradient(#cbd5e1 2.5px, transparent 2.5px);
+  background-size: 36px 36px;
+  overflow: hidden;
+  height: 100%;
+  min-height: 0;
+}
+
+.wb-cursor {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8), inset 0 0 4px rgba(0, 0, 0, 0.1);
+  transform: translate(-50%, -50%);
+  display: none;
+  z-index: 5;
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.wb-guide {
+  position: absolute;
+  bottom: 148px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  padding: 10px 20px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  pointer-events: none;
+  z-index: 20;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.wb-toolbar {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+  padding: 0 28px 12px;
+  height: 110px;
+  border-radius: 32px;
+  background-color: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.03);
+  z-index: 10;
+}
+
+.wb-tool-group {
+  display: flex;
+  align-items: flex-end;
+  gap: 22px;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  padding-right: 24px;
+  height: 100%;
+}
+
+.wb-thickness-group,
+.wb-color-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  padding-right: 24px;
+  height: 100%;
+  padding-bottom: 8px;
+}
+
+.wb-color-group {
+  gap: 10px;
+}
+
+.wb-tool {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transform: translateY(12px);
+  width: 24px;
+  height: 90px;
+}
+
+.wb-tool.active {
+  transform: translateY(-16px);
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-panel {
+  width: 500px;
+  max-width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--neutral);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.settings-panel {
+  width: 440px;
+  max-width: 90%;
+}
+
+.danger-text-btn {
+  background: transparent;
+  border: none;
+  color: #ef4444;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+}
+
+.color-preset-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.color-preset-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 8px;
+  background: transparent;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.color-preset-btn.active {
+  background: #fff;
+  border: 2px solid var(--primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.color-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.lang-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.lang-option input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <header class="top-nav">
+        <div class="top-nav-left">
+          <h1 class="headline-lg top-nav-brand">yochiyochi</h1>
+          <nav class="top-nav-tabs" id="nav-tabs"></nav>
+        </div>
+        <div class="pill-group">
+          <button class="pill-icon-btn" id="btn-help" type="button" title="Help">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </button>
+          <button class="pill-icon-btn" id="btn-settings" type="button" title="Settings">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path
+                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Lessons -->
+      <section class="page active" id="page-lessons" data-page="lessons">
+        <div class="app-container">
+          <main class="canvas-area">
+            <div class="char-stage" id="char-stage">
+              <button class="char-clear-btn" id="practice-clear" type="button" title="Clear">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"
+                  />
+                </svg>
+              </button>
+              <canvas
+                class="practice-canvas"
+                id="practice-canvas"
+                width="920"
+                height="920"
+              ></canvas>
+              <span class="char-romaji" id="char-romaji"></span>
+              <div class="char-display" id="char-display"></div>
+              <div class="hidden" id="char-error" style="text-align: center">
+                <div class="display-xl" style="font-size: 14cqw; margin-bottom: 4cqw; opacity: 0.3">
+                  ⚠
+                </div>
+                <p class="body-lg" id="char-error-text" style="font-size: 3.5cqw; opacity: 0.6"></p>
+              </div>
+            </div>
+            <div class="recent-tray" id="recent-tray"></div>
+            <div class="shortcut-hint">
+              <span data-i18n="shortcutSpace"></span>
+              <span data-i18n="shortcutR"></span>
+            </div>
+          </main>
+          <aside class="sidebar-area">
+            <div class="sidebar-inner">
+              <h2 class="headline-lg" style="font-size: 28px; line-height: 1; margin-bottom: 8px">
+                yochiyochi
+              </h2>
+              <p
+                class="label-lg"
+                data-i18n="learningPanel"
+                style="color: var(--neutral); opacity: 0.7; margin-bottom: 24px; padding-left: 24px"
+              ></p>
+
+              <p
+                class="label-lg"
+                data-i18n="scriptType"
+                style="margin-bottom: 8px; padding-left: 24px"
+              ></p>
+              <div class="segmented-control" id="script-type-control"></div>
+
+              <p class="label-lg" data-i18n="range" style="margin-bottom: 8px; padding-left: 24px"></p>
+              <div class="card" style="padding: 8px 24px; margin-bottom: 24px" id="range-toggles"></div>
+
+              <p
+                class="label-lg"
+                data-i18n="displayOptions"
+                style="margin-bottom: 8px; padding-left: 24px"
+              ></p>
+              <div
+                class="card"
+                style="padding: 8px 24px; margin-bottom: 24px"
+                id="display-toggles"
+              ></div>
+
+              <p class="sidebar-tip" data-i18n="sidebarTip"></p>
+            </div>
+          </aside>
+        </div>
+        <footer class="bottom-bar">
+          <button class="btn-primary" id="btn-draw" type="button" style="flex: 1; height: 80px"></button>
+        </footer>
+      </section>
+
+      <!-- History -->
+      <section class="page" id="page-history" data-page="history">
+        <div class="page-header">
+          <div>
+            <h2 class="headline-lg" data-i18n="drawHistory" style="font-size: 28px; line-height: 1; margin-bottom: 8px"></h2>
+            <p class="label-lg" id="history-count" style="opacity: 0.5"></p>
+          </div>
+          <button class="danger-text-btn hidden" id="btn-clear-history" type="button" data-i18n="deleteAll"></button>
+        </div>
+        <div class="page-scroll" id="history-list"></div>
+      </section>
+
+      <!-- Cards -->
+      <section class="page" id="page-cards" data-page="cards">
+        <div class="cards-layout">
+          <div class="cards-main">
+            <div class="cards-script-tabs" id="cards-script-tabs"></div>
+            <div id="cards-sections"></div>
+          </div>
+          <aside class="cards-preview hidden" id="cards-preview"></aside>
+        </div>
+      </section>
+
+      <!-- Whiteboard -->
+      <section class="page" id="page-whiteboard" data-page="whiteboard">
+        <div class="wb-wrap" id="wb-wrap">
+          <div class="wb-cursor" id="wb-cursor"></div>
+          <div class="wb-guide" id="wb-guide"></div>
+          <canvas id="wb-canvas"></canvas>
+          <div class="wb-toolbar" id="wb-toolbar"></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="modal-backdrop hidden" id="help-modal">
+      <div class="card modal-panel" id="help-panel"></div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-backdrop hidden" id="settings-modal">
+      <div class="card modal-panel settings-panel" id="settings-panel"></div>
+    </div>
+
+    <script>
+window.Yochi = window.Yochi || {}
+
+// 청음 (Seion) - 46 characters
+window.Yochi.seion = [
+  { char: 'あ', romaji: 'a' },
+  { char: 'い', romaji: 'i' },
+  { char: 'う', romaji: 'u' },
+  { char: 'え', romaji: 'e' },
+  { char: 'お', romaji: 'o' },
+  { char: 'か', romaji: 'ka' },
+  { char: 'き', romaji: 'ki' },
+  { char: 'く', romaji: 'ku' },
+  { char: 'け', romaji: 'ke' },
+  { char: 'こ', romaji: 'ko' },
+  { char: 'さ', romaji: 'sa' },
+  { char: 'し', romaji: 'shi' },
+  { char: 'す', romaji: 'su' },
+  { char: 'せ', romaji: 'se' },
+  { char: 'そ', romaji: 'so' },
+  { char: 'た', romaji: 'ta' },
+  { char: 'ち', romaji: 'chi' },
+  { char: 'つ', romaji: 'tsu' },
+  { char: 'て', romaji: 'te' },
+  { char: 'と', romaji: 'to' },
+  { char: 'な', romaji: 'na' },
+  { char: 'に', romaji: 'ni' },
+  { char: 'ぬ', romaji: 'nu' },
+  { char: 'ね', romaji: 'ne' },
+  { char: 'の', romaji: 'no' },
+  { char: 'は', romaji: 'ha' },
+  { char: 'ひ', romaji: 'hi' },
+  { char: 'ふ', romaji: 'fu' },
+  { char: 'へ', romaji: 'he' },
+  { char: 'ほ', romaji: 'ho' },
+  { char: 'ま', romaji: 'ma' },
+  { char: 'み', romaji: 'mi' },
+  { char: 'む', romaji: 'mu' },
+  { char: 'め', romaji: 'me' },
+  { char: 'も', romaji: 'mo' },
+  { char: 'や', romaji: 'ya' },
+  { char: 'ゆ', romaji: 'yu' },
+  { char: 'よ', romaji: 'yo' },
+  { char: 'ら', romaji: 'ra' },
+  { char: 'り', romaji: 'ri' },
+  { char: 'る', romaji: 'ru' },
+  { char: 'れ', romaji: 're' },
+  { char: 'ろ', romaji: 'ro' },
+  { char: 'わ', romaji: 'wa' },
+  { char: 'を', romaji: 'wo' },
+  { char: 'ん', romaji: 'n' }
+]
+
+// 탁음 (Dakuon) - 20 characters
+window.Yochi.dakuon = [
+  { char: 'が', romaji: 'ga' },
+  { char: 'ぎ', romaji: 'gi' },
+  { char: 'ぐ', romaji: 'gu' },
+  { char: 'げ', romaji: 'ge' },
+  { char: 'ご', romaji: 'go' },
+  { char: 'ざ', romaji: 'za' },
+  { char: 'じ', romaji: 'ji' },
+  { char: 'ず', romaji: 'zu' },
+  { char: 'ぜ', romaji: 'ze' },
+  { char: 'ぞ', romaji: 'zo' },
+  { char: 'だ', romaji: 'da' },
+  { char: 'ぢ', romaji: 'di' },
+  { char: 'づ', romaji: 'du' },
+  { char: 'で', romaji: 'de' },
+  { char: 'ど', romaji: 'do' },
+  { char: 'ば', romaji: 'ba' },
+  { char: 'び', romaji: 'bi' },
+  { char: 'ぶ', romaji: 'bu' },
+  { char: 'べ', romaji: 'be' },
+  { char: 'ぼ', romaji: 'bo' }
+]
+
+// 반탁음 (Handakuon) - 5 characters
+window.Yochi.handakuon = [
+  { char: 'ぱ', romaji: 'pa' },
+  { char: 'ぴ', romaji: 'pi' },
+  { char: 'ぷ', romaji: 'pu' },
+  { char: 'ぺ', romaji: 'pe' },
+  { char: 'ぽ', romaji: 'po' }
+]
+
+// 요음 (Yōon) - 33 characters
+window.Yochi.yoon = [
+  { char: 'きゃ', romaji: 'kya' },
+  { char: 'きゅ', romaji: 'kyu' },
+  { char: 'きょ', romaji: 'kyo' },
+  { char: 'しゃ', romaji: 'sha' },
+  { char: 'しゅ', romaji: 'shu' },
+  { char: 'しょ', romaji: 'sho' },
+  { char: 'ちゃ', romaji: 'cha' },
+  { char: 'ちゅ', romaji: 'chu' },
+  { char: 'ちょ', romaji: 'cho' },
+  { char: 'にゃ', romaji: 'nya' },
+  { char: 'にゅ', romaji: 'nyu' },
+  { char: 'にょ', romaji: 'nyo' },
+  { char: 'ひゃ', romaji: 'hya' },
+  { char: 'ひゅ', romaji: 'hyu' },
+  { char: 'ひょ', romaji: 'hyo' },
+  { char: 'みゃ', romaji: 'mya' },
+  { char: 'みゅ', romaji: 'myu' },
+  { char: 'みょ', romaji: 'myo' },
+  { char: 'りゃ', romaji: 'rya' },
+  { char: 'りゅ', romaji: 'ryu' },
+  { char: 'りょ', romaji: 'ryo' },
+  { char: 'ぎゃ', romaji: 'gya' },
+  { char: 'ぎゅ', romaji: 'gyu' },
+  { char: 'ぎょ', romaji: 'gyo' },
+  { char: 'じゃ', romaji: 'ja' },
+  { char: 'じゅ', romaji: 'ju' },
+  { char: 'じょ', romaji: 'jo' },
+  { char: 'びゃ', romaji: 'bya' },
+  { char: 'びゅ', romaji: 'byu' },
+  { char: 'びょ', romaji: 'byo' },
+  { char: 'ぴゃ', romaji: 'pya' },
+  { char: 'ぴゅ', romaji: 'pyu' },
+  { char: 'ぴょ', romaji: 'pyo' }
+]
+
+window.Yochi.toKatakana = function toKatakana(hira) {
+  return Array.from(hira)
+    .map((c) => {
+      const code = c.charCodeAt(0)
+      if (code >= 0x3041 && code <= 0x3096) {
+        return String.fromCharCode(code + 0x60)
+      }
+      return c
+    })
+    .join('')
+}
+
+
+window.Yochi = window.Yochi || {}
+
+window.Yochi.translations = {
+  lessons: { ko: '문자', en: 'Lessons', ja: 'レッスン' },
+  history: { ko: '기록', en: 'History', ja: '履歴' },
+  cards: { ko: '카드', en: 'Cards', ja: 'カード' },
+  whiteboard: { ko: '화이트보드', en: 'Whiteboard', ja: 'ホワイトボード' },
+  settings: { ko: '설정', en: 'Settings', ja: '設定' },
+  help: { ko: '도움말 가이드', en: 'Help Guide', ja: 'ヘルプガイド' },
+  learningPanel: { ko: '학습 설정', en: 'LEARNING PANEL', ja: '学習パネル' },
+  scriptType: { ko: '문자 종류', en: 'SCRIPT TYPE', ja: '文字の種類' },
+  hiragana: { ko: '히라가나', en: 'Hiragana', ja: 'ひらがな' },
+  katakana: { ko: '가타카나', en: 'Katakana', ja: 'カタカナ' },
+  mixed: { ko: '혼합', en: 'Mixed', ja: '混合' },
+  range: { ko: '학습 범위', en: 'LEARNING RANGE', ja: '学習範囲' },
+  seion: { ko: '청음', en: 'Seion', ja: '清音' },
+  dakuon: { ko: '탁음', en: 'Dakuon', ja: '濁音' },
+  handakuon: { ko: '반탁음', en: 'Handakuon', ja: '半濁音' },
+  yoon: { ko: '요음', en: 'Yoon', ja: '拗音' },
+  preventDuplicates: { ko: '중복 방지', en: 'Prevent Duplicates', ja: '重複防止' },
+  displayOptions: { ko: '표시 옵션', en: 'DISPLAY OPTIONS', ja: '表示オプション' },
+  showRomaji: { ko: '발음 표시', en: 'Show Romaji', ja: 'ローマ字表示' },
+  sidebarTip: {
+    ko: 'TIP: 단어와 이미지는 한 번에 끄고 켤 수 있습니다.',
+    en: 'TIP: You can toggle words and images at once.',
+    ja: 'ヒント: 単語と画像を一度に切り替えられます。'
+  },
+  drawBtn: { ko: '뽑기', en: 'DRAW', ja: '引く' },
+  drawHistory: { ko: '뽑은 기록', en: 'Draw History', ja: '引いた履歴' },
+  totalCount: { ko: '총 {count}개', en: 'Total {count}', ja: '計 {count}個' },
+  deleteAll: { ko: '전체 삭제', en: 'Delete All', ja: 'すべて削除' },
+  confirmClear: { ko: '정말 삭제?', en: 'Confirm?', ja: '削除しますか？' },
+  noHistory: {
+    ko: '아직 뽑은 기록이 없습니다',
+    en: 'No draw history yet',
+    ja: 'まだ履歴がありません'
+  },
+  noHistorySub: {
+    ko: '문자 탭에서 글자를 뽑아보세요',
+    en: 'Draw characters in the Lessons tab',
+    ja: 'レッスンタブで文字を引いてみてください'
+  },
+  languageSettings: { ko: '언어 설정', en: 'LANGUAGE', ja: '言語設定' },
+  themeSettings: { ko: '테마 설정', en: 'THEME SETTINGS', ja: 'テーマ設定' },
+  themeColorLabel: { ko: '앱 테마 색상', en: 'App Theme Color', ja: 'アプリのテーマカラー' },
+  NO_SELECTION: {
+    ko: '학습 범위를 하나 이상 켜주세요.',
+    en: 'Please turn on at least one learning range.',
+    ja: '学習範囲を1つ以上オンにしてください。'
+  },
+  helpTitle: { ko: '요치요치 도움말', en: 'YochiYochi Help', ja: 'ヨチヨチ ヘルプ' },
+  whiteboardGuide: {
+    ko: '🖱 좌클릭 : 필기  •  🖱 우클릭 : 지우개',
+    en: '🖱 Left Click: Write  •  🖱 Right Click: Erase',
+    ja: '🖱 左クリック: 筆記  •  🖱 右クリック: 消しゴム'
+  },
+  helpLessons: {
+    ko: '문자 탭에서는 설정한 범위 내에서 히라가나/가타카나를 무작위로 뽑을 수 있습니다.',
+    en: 'In the Lessons tab, you can randomly draw characters within the set range.',
+    ja: 'レッスンタブでは、設定した範囲内で文字をランダムに引くことができます。'
+  },
+  helpWhiteboard: {
+    ko: '화이트보드 탭에서는 자유롭게 필기를 할 수 있습니다. 획 위에 우클릭을 하면 해당 획 전체가 지워지는 스마트 획 지우개를 지원합니다.',
+    en: 'In the Whiteboard tab, you can write freely. Right-click on a stroke to erase the entire path with the smart path eraser.',
+    ja: 'ホワイトボードタブでは、自由に手書きができます。描いた線の上で右クリックすると、線全体が消えるインテリジェント消しゴムをサポートしています。'
+  },
+  helpHotkeysTitle: {
+    ko: '스마트 단축키 가이드',
+    en: 'Smart Shortcut Guide',
+    ja: 'スマートショートカットガイド'
+  },
+  helpHotkeys: {
+    ko: '• Space / R: 무작위 문자 새로 뽑기 (문자)\n• 마우스 우클릭: 화이트보드 획 단위 지우개',
+    en: '• Space / R: Random draw new character (Lessons)\n• Mouse Right Click: Erase stroke-by-stroke in Whiteboard',
+    ja: '• Space / R: 該当文字をランダムに引く (レッスン)\n• マウス右クリック: ホワイトボードで線単位で消去'
+  },
+  helpHistory: {
+    ko: '기록 탭에서는 지금까지 뽑은 글자들의 내역을 확인하고 다시 띄울 수 있습니다.',
+    en: 'In the History tab, you can view the drawn characters and display them again.',
+    ja: '履歴タブでは、これまでに引いた文字の履歴を確認し、再度表示できます。'
+  },
+  helpCards: {
+    ko: '카드 탭에서는 모든 글자의 목록을 보고 원하는 글자를 클릭해 화면에 크게 띄울 수 있습니다.',
+    en: 'In the Cards tab, you can view all characters and click to display them large.',
+    ja: 'カードタブでは、すべての文字のリストを表示し、クリックして大きく表示できます。'
+  },
+  close: { ko: '닫기', en: 'Close', ja: '閉じる' },
+  clearHistoryConfirm: {
+    ko: '정말로 모든 기록을 삭제하시겠습니까?',
+    en: 'Are you sure you want to delete all history?',
+    ja: '本当にすべての履歴を削除しますか？'
+  },
+  shortcutSpace: {
+    ko: '⎵ 스페이스바 : 뽑기',
+    en: '⎵ Space : Draw',
+    ja: '⎵ スペース : 引く'
+  },
+  shortcutR: {
+    ko: 'R : 다시 뽑기',
+    en: 'R : Redraw',
+    ja: 'R : 再抽選'
+  }
+}
+
+window.Yochi.t = function t(key, lang, params) {
+  const translation =
+    window.Yochi.translations[key]?.[lang] || window.Yochi.translations[key]?.ko || key
+  if (!params) return translation
+  return Object.keys(params).reduce(
+    (str, paramKey) => str.replace(`{${paramKey}}`, String(params[paramKey])),
+    translation
+  )
+}
+
+
+;(function () {
+  const { seion, dakuon, handakuon, yoon, toKatakana, t } = window.Yochi
+
+  const STORAGE_KEY = 'yochiyochi-native-config'
+  const COLOR_PRESETS = [
+    { name: 'Forest Green', color: '#006c49', containerColor: '#10b981' },
+    { name: 'Ocean Blue', color: '#1d4ed8', containerColor: '#3b82f6' },
+    { name: 'Sunset Orange', color: '#c2410c', containerColor: '#f97316' },
+    { name: 'Royal Purple', color: '#6d28d9', containerColor: '#8b5cf6' },
+    { name: 'Rose Red', color: '#be123c', containerColor: '#f43f5e' },
+    { name: 'Sleek Indigo', color: '#4338ca', containerColor: '#6366f1' }
+  ]
+
+  const state = {
+    currentPage: 'lessons',
+    uiLanguage: 'ko',
+    themeColor: '#006c49',
+    themeColorContainer: '#10b981',
+    scriptType: 'hiragana',
+    useSeion: true,
+    useDakuon: false,
+    useHandakuon: false,
+    useYoon: false,
+    preventDuplicates: false,
+    showRomaji: true,
+    character: null,
+    errorMessage: null,
+    history: [],
+    drawHistory: [],
+    cardsScriptType: 'hiragana',
+    cardsSelected: null
+  }
+
+  // ── Config ──
+  function loadConfig() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY)
+      if (!raw) return
+      const config = JSON.parse(raw)
+      Object.assign(state, {
+        uiLanguage: config.uiLanguage || state.uiLanguage,
+        scriptType: config.scriptType || state.scriptType,
+        useSeion: typeof config.useSeion === 'boolean' ? config.useSeion : state.useSeion,
+        useDakuon: typeof config.useDakuon === 'boolean' ? config.useDakuon : state.useDakuon,
+        useHandakuon:
+          typeof config.useHandakuon === 'boolean' ? config.useHandakuon : state.useHandakuon,
+        useYoon: typeof config.useYoon === 'boolean' ? config.useYoon : state.useYoon,
+        preventDuplicates:
+          typeof config.preventDuplicates === 'boolean'
+            ? config.preventDuplicates
+            : state.preventDuplicates,
+        showRomaji: typeof config.showRomaji === 'boolean' ? config.showRomaji : state.showRomaji,
+        themeColor: config.themeColor || state.themeColor,
+        themeColorContainer: config.themeColorContainer || state.themeColorContainer
+      })
+    } catch {
+      /* ignore */
+    }
+  }
+
+  function saveConfig() {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        uiLanguage: state.uiLanguage,
+        scriptType: state.scriptType,
+        useSeion: state.useSeion,
+        useDakuon: state.useDakuon,
+        useHandakuon: state.useHandakuon,
+        useYoon: state.useYoon,
+        preventDuplicates: state.preventDuplicates,
+        showRomaji: state.showRomaji,
+        themeColor: state.themeColor,
+        themeColorContainer: state.themeColorContainer
+      })
+    )
+  }
+
+  function applyTheme() {
+    document.documentElement.style.setProperty('--primary', state.themeColor)
+    document.documentElement.style.setProperty('--primary-container', state.themeColorContainer)
+  }
+
+  // ── Character draw ──
+  function drawCharacter() {
+    const pool = []
+    const addChars = (source, typeName) => {
+      source.forEach((c) => {
+        if (state.scriptType === 'hiragana' || state.scriptType === 'mixed') {
+          pool.push({ ...c, type: typeName })
+        }
+        if (state.scriptType === 'katakana' || state.scriptType === 'mixed') {
+          pool.push({ char: toKatakana(c.char), romaji: c.romaji, type: typeName })
+        }
+      })
+    }
+
+    if (state.useSeion) addChars(seion, 'seion')
+    if (state.useDakuon) addChars(dakuon, 'dakuon')
+    if (state.useHandakuon) addChars(handakuon, 'handakuon')
+    if (state.useYoon) addChars(yoon, 'yoon')
+
+    if (pool.length === 0) {
+      state.errorMessage = 'NO_SELECTION'
+      state.character = null
+      renderLessonsCanvas()
+      return
+    }
+
+    let candidates = pool
+    if (state.preventDuplicates) {
+      const filtered = pool.filter((c) => !state.drawHistory.includes(c.char))
+      if (filtered.length === 0) {
+        state.drawHistory = []
+      } else {
+        candidates = filtered
+      }
+    }
+
+    const picked = candidates[Math.floor(Math.random() * candidates.length)]
+    if (state.preventDuplicates) state.drawHistory.push(picked.char)
+
+    state.errorMessage = null
+    state.character = picked
+
+    const now = new Date()
+    const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
+    state.history.push({ ...picked, drawnAt: timeStr })
+
+    clearPracticeCanvas()
+    renderLessonsCanvas()
+    renderRecentTray()
+    if (state.currentPage === 'history') renderHistory()
+  }
+
+  // ── i18n helpers ──
+  function applyI18n() {
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
+      el.textContent = t(el.getAttribute('data-i18n'), state.uiLanguage)
+    })
+    document.getElementById('btn-help').title = t('help', state.uiLanguage)
+    document.getElementById('btn-settings').title = t('settings', state.uiLanguage)
+    renderNav()
+    renderSidebarControls()
+    renderDrawButton()
+    renderLessonsCanvas()
+    renderRecentTray()
+    renderHistory()
+    renderCards()
+    renderWhiteboardChrome()
+    if (!document.getElementById('help-modal').classList.contains('hidden')) renderHelpModal()
+    if (!document.getElementById('settings-modal').classList.contains('hidden')) renderSettingsModal()
+  }
+
+  // ── Navigation ──
+  function renderNav() {
+    const tabs = [
+      { id: 'lessons', label: t('lessons', state.uiLanguage) },
+      { id: 'history', label: t('history', state.uiLanguage) },
+      { id: 'cards', label: t('cards', state.uiLanguage) },
+      { id: 'whiteboard', label: t('whiteboard', state.uiLanguage) }
+    ]
+    const nav = document.getElementById('nav-tabs')
+    nav.innerHTML = tabs
+      .map(
+        (tab) =>
+          `<a href="#" class="nav-tab ${state.currentPage === tab.id ? 'active' : ''}" data-page="${tab.id}">${tab.label}</a>`
+      )
+      .join('')
+  }
+
+  function setPage(page) {
+    state.currentPage = page
+    document.querySelectorAll('.page').forEach((el) => {
+      el.classList.toggle('active', el.dataset.page === page)
+    })
+    renderNav()
+    if (page === 'history') renderHistory()
+    if (page === 'cards') renderCards()
+    if (page === 'whiteboard') {
+      whiteboard.onActivate()
+    }
+  }
+
+  // ── Lessons UI ──
+  function renderDrawButton() {
+    const btn = document.getElementById('btn-draw')
+    if (state.uiLanguage === 'ko') {
+      btn.innerHTML = `<span style="display:flex;align-items:center;justify-content:center;gap:8px"><span style="font-size:24px;font-weight:800">뽑기</span><span style="font-size:13px;font-weight:500;opacity:0.5;letter-spacing:0.05em;transform:translateY(1px)">DRAW</span></span>`
+    } else {
+      btn.innerHTML = `<span style="font-size:24px;font-weight:800">${t('drawBtn', state.uiLanguage)}</span>`
+    }
+  }
+
+  function toggleRow(label, checked, onChangeAttr) {
+    return `<div class="toggle-row"><span>${label}</span><label class="toggle-switch"><input type="checkbox" ${checked ? 'checked' : ''} data-toggle="${onChangeAttr}" /><span class="slider"></span></label></div>`
+  }
+
+  function renderSidebarControls() {
+    const scriptCtrl = document.getElementById('script-type-control')
+    const opts = [
+      { id: 'hiragana', label: t('hiragana', state.uiLanguage) },
+      { id: 'katakana', label: t('katakana', state.uiLanguage) },
+      { id: 'mixed', label: t('mixed', state.uiLanguage) }
+    ]
+    scriptCtrl.innerHTML = opts
+      .map(
+        (o) =>
+          `<button type="button" data-script="${o.id}" class="${state.scriptType === o.id ? 'active' : ''}">${o.label}</button>`
+      )
+      .join('')
+
+    document.getElementById('range-toggles').innerHTML =
+      toggleRow(t('seion', state.uiLanguage), state.useSeion, 'useSeion') +
+      toggleRow(t('dakuon', state.uiLanguage), state.useDakuon, 'useDakuon') +
+      toggleRow(t('handakuon', state.uiLanguage), state.useHandakuon, 'useHandakuon') +
+      toggleRow(t('yoon', state.uiLanguage), state.useYoon, 'useYoon')
+
+    document.getElementById('display-toggles').innerHTML =
+      toggleRow(t('showRomaji', state.uiLanguage), state.showRomaji, 'showRomaji') +
+      toggleRow(t('preventDuplicates', state.uiLanguage), state.preventDuplicates, 'preventDuplicates')
+  }
+
+  function renderLessonsCanvas() {
+    const errorEl = document.getElementById('char-error')
+    const romajiEl = document.getElementById('char-romaji')
+    const displayEl = document.getElementById('char-display')
+    const clearBtn = document.getElementById('practice-clear')
+    const canvas = document.getElementById('practice-canvas')
+
+    if (state.errorMessage) {
+      errorEl.classList.remove('hidden')
+      document.getElementById('char-error-text').textContent = t(state.errorMessage, state.uiLanguage)
+      romajiEl.textContent = ''
+      displayEl.innerHTML = ''
+      clearBtn.classList.add('hidden')
+      canvas.classList.add('hidden')
+      return
+    }
+
+    errorEl.classList.add('hidden')
+    clearBtn.classList.remove('hidden')
+    canvas.classList.remove('hidden')
+
+    romajiEl.style.display = state.showRomaji ? '' : 'none'
+    romajiEl.textContent = state.character ? state.character.romaji.toUpperCase() : ''
+
+    const ch = state.character ? state.character.char : '?'
+    if (ch.length >= 2) {
+      displayEl.innerHTML = `<span class="display-xl" style="font-size:54cqw;line-height:67cqw">${ch[0]}</span><span class="display-xl" style="font-size:38cqw;line-height:67cqw">${ch[1]}</span>`
+    } else {
+      displayEl.innerHTML = `<span class="display-xl" style="font-size:74cqw;line-height:67cqw">${ch}</span>`
+    }
+  }
+
+  function renderRecentTray() {
+    const tray = document.getElementById('recent-tray')
+    const recent = state.history.slice(-5).reverse()
+    if (!recent.length) {
+      tray.innerHTML = ''
+      return
+    }
+    tray.innerHTML =
+      `<span class="recent-label">RECENT</span>` +
+      recent
+        .map(
+          (item) =>
+            `<div class="recent-badge card" title="${item.romaji.toUpperCase()}"><span style="font-size:15px;font-weight:800;color:var(--neutral);line-height:1">${item.char}</span></div>`
+        )
+        .join('')
+  }
+
+  // ── Practice canvas drawing ──
+  let practiceDrawing = false
+  function clearPracticeCanvas() {
+    const canvas = document.getElementById('practice-canvas')
+    const ctx = canvas.getContext('2d')
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+  }
+
+  function practiceCoords(e) {
+    const canvas = document.getElementById('practice-canvas')
+    const rect = canvas.getBoundingClientRect()
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY
+    return {
+      x: ((clientX - rect.left) / rect.width) * canvas.width,
+      y: ((clientY - rect.top) / rect.height) * canvas.height
+    }
+  }
+
+  function initPracticeCanvas() {
+    const canvas = document.getElementById('practice-canvas')
+    const start = (e) => {
+      const ctx = canvas.getContext('2d')
+      practiceDrawing = true
+      const { x, y } = practiceCoords(e)
+      ctx.beginPath()
+      ctx.moveTo(x, y)
+      ctx.lineWidth = 8
+      ctx.lineCap = 'round'
+      ctx.lineJoin = 'round'
+      ctx.strokeStyle =
+        getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#006c49'
+    }
+    const move = (e) => {
+      if (!practiceDrawing) return
+      if (e.cancelable) e.preventDefault()
+      const ctx = canvas.getContext('2d')
+      const { x, y } = practiceCoords(e)
+      ctx.lineTo(x, y)
+      ctx.stroke()
+    }
+    const stop = () => {
+      practiceDrawing = false
+    }
+    canvas.addEventListener('mousedown', start)
+    canvas.addEventListener('mousemove', move)
+    canvas.addEventListener('mouseup', stop)
+    canvas.addEventListener('mouseleave', stop)
+    canvas.addEventListener('touchstart', start, { passive: true })
+    canvas.addEventListener('touchmove', move, { passive: false })
+    canvas.addEventListener('touchend', stop)
+    document.getElementById('practice-clear').addEventListener('click', clearPracticeCanvas)
+  }
+
+  // ── History ──
+  function getDrawnTime(drawnAt, offsetIndex) {
+    const parts = drawnAt.split(':')
+    if (parts.length !== 2) return drawnAt
+    let hour = parseInt(parts[0], 10)
+    let min = parseInt(parts[1], 10)
+    if (isNaN(hour) || isNaN(min)) return drawnAt
+    let newMin = min - offsetIndex * 2
+    let newHour = hour
+    if (newMin < 0) {
+      const hoursBack = Math.ceil(Math.abs(newMin) / 60)
+      newHour = (newHour - hoursBack + 24) % 24
+      newMin = 60 * hoursBack + newMin
+    }
+    return `${String(newHour).padStart(2, '0')}:${String(newMin).padStart(2, '0')}`
+  }
+
+  function renderHistory() {
+    document.getElementById('history-count').textContent = t('totalCount', state.uiLanguage, {
+      count: state.history.length
+    })
+    const clearBtn = document.getElementById('btn-clear-history')
+    clearBtn.classList.toggle('hidden', state.history.length === 0)
+    clearBtn.textContent = t('deleteAll', state.uiLanguage)
+
+    const list = document.getElementById('history-list')
+    if (!state.history.length) {
+      list.innerHTML = `<div class="empty-state"><span style="font-size:48px;margin-bottom:16px">📋</span><p class="body-lg">${t('noHistory', state.uiLanguage)}</p><p style="font-size:14px">${t('noHistorySub', state.uiLanguage)}</p></div>`
+      return
+    }
+
+    const reversed = [...state.history].reverse()
+    list.innerHTML = `<div class="history-grid">${reversed
+      .map(
+        (entry, idx) =>
+          `<button type="button" class="card history-card" data-history-idx="${state.history.length - 1 - idx}"><span style="font-size:36px;font-weight:800;margin-bottom:4px">${entry.char}</span><span class="label-lg" style="color:var(--primary);font-size:11px">${entry.romaji.toUpperCase()}</span><span style="font-size:10px;opacity:0.4;margin-top:4px">${getDrawnTime(entry.drawnAt, idx)}</span></button>`
+      )
+      .join('')}</div>`
+  }
+
+  // ── Cards ──
+  function renderCards() {
+    const tabs = document.getElementById('cards-script-tabs')
+    tabs.innerHTML = ['hiragana', 'katakana']
+      .map(
+        (id) =>
+          `<button type="button" class="script-pill ${state.cardsScriptType === id ? 'active' : ''}" data-cards-script="${id}">${t(id, state.uiLanguage)}</button>`
+      )
+      .join('')
+
+    const sections = [
+      { title: t('seion', state.uiLanguage), data: seion, type: 'seion' },
+      { title: t('dakuon', state.uiLanguage), data: dakuon, type: 'dakuon' },
+      { title: t('handakuon', state.uiLanguage), data: handakuon, type: 'handakuon' },
+      { title: t('yoon', state.uiLanguage), data: yoon, type: 'yoon' }
+    ]
+
+    document.getElementById('cards-sections').innerHTML = sections
+      .map(
+        (section) =>
+          `<div style="margin-bottom:32px"><h3 class="label-lg" style="margin-bottom:12px">${section.title}</h3><div class="kana-grid">${section.data
+            .map((entry) => {
+              const displayChar =
+                state.cardsScriptType === 'katakana' ? toKatakana(entry.char) : entry.char
+              const isSelected = state.cardsSelected?.char === entry.char
+              return `<button type="button" class="kana-card ${isSelected ? 'selected' : ''}" data-card-char="${entry.char}" data-card-romaji="${entry.romaji}" data-card-type="${section.type}"><span style="font-size:${displayChar.length >= 2 ? 18 : 24}px;font-weight:800;margin-bottom:2px">${displayChar}</span><span style="font-size:10px;opacity:${isSelected ? 0.8 : 0.5}">${entry.romaji}</span></button>`
+            })
+            .join('')}</div></div>`
+      )
+      .join('')
+
+    const preview = document.getElementById('cards-preview')
+    if (!state.cardsSelected) {
+      preview.classList.add('hidden')
+      preview.innerHTML = ''
+      return
+    }
+
+    const sel = state.cardsSelected
+    const d0 =
+      state.cardsScriptType === 'katakana' ? toKatakana(sel.char[0] || sel.char) : sel.char[0] || sel.char
+    const d1 =
+      sel.char.length >= 2
+        ? state.cardsScriptType === 'katakana'
+          ? toKatakana(sel.char[1])
+          : sel.char[1]
+        : null
+
+    preview.classList.remove('hidden')
+    preview.innerHTML = `<span style="color:var(--primary);font-weight:700;font-size:18px;margin-bottom:16px">${sel.romaji.toUpperCase()}</span><div style="display:flex;align-items:flex-end;margin-bottom:24px">${
+      d1
+        ? `<span style="font-size:120px;font-weight:800;line-height:1">${d0}</span><span style="font-size:90px;font-weight:800;line-height:100px">${d1}</span>`
+        : `<span style="font-size:140px;font-weight:800;line-height:1">${d0}</span>`
+    }</div><span class="label-lg" style="opacity:0.4">${sel.type.toUpperCase()}</span>`
+  }
+
+  // ── Whiteboard ──
+  const whiteboard = (function () {
+    let strokes = []
+    let currentStroke = null
+    let lastEraserPos = null
+    let isErasingMode = false
+    let isDrawing = false
+    let activeTool = 'pen'
+    let selectedColor = '#0B1C30'
+    let thicknessLevel = 'medium'
+    let confirmClear = false
+    let confirmTimer = null
+    let guideTimer = null
+
+    const colors = [
+      { value: '#0B1C30', name: 'Dark' },
+      { value: '#EF4444', name: 'Red' },
+      { value: '#3B82F6', name: 'Blue' },
+      { value: 'var(--primary)', name: 'Theme' }
+    ]
+
+    function getDisplayColor() {
+      if (selectedColor.startsWith('var(')) {
+        return (
+          state.themeColor ||
+          getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() ||
+          '#006c49'
+        )
+      }
+      return selectedColor
+    }
+
+    function getThicknessPx(level) {
+      if (activeTool === 'eraser') {
+        return level === 'thin' ? 15 : level === 'medium' ? 35 : 70
+      }
+      return level === 'thin' ? 3 : level === 'medium' ? 8 : 18
+    }
+
+    function distanceToSegment(p, a, b) {
+      const dx = b.x - a.x
+      const dy = b.y - a.y
+      if (dx === 0 && dy === 0) return Math.hypot(p.x - a.x, p.y - a.y)
+      let tt = ((p.x - a.x) * dx + (p.y - a.y) * dy) / (dx * dx + dy * dy)
+      tt = Math.max(0, Math.min(1, tt))
+      return Math.hypot(p.x - (a.x + tt * dx), p.y - (a.y + tt * dy))
+    }
+
+    function redrawCanvas() {
+      const canvas = document.getElementById('wb-canvas')
+      const ctx = canvas.getContext('2d')
+      ctx.save()
+      ctx.setTransform(1, 0, 0, 1, 0, 0)
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.restore()
+
+      strokes.forEach((stroke) => {
+        if (!stroke.points.length) return
+        ctx.beginPath()
+        ctx.moveTo(stroke.points[0].x, stroke.points[0].y)
+        for (let i = 1; i < stroke.points.length; i++) {
+          ctx.lineTo(stroke.points[i].x, stroke.points[i].y)
+        }
+        if (stroke.tool === 'eraser') {
+          ctx.globalCompositeOperation = 'destination-out'
+          ctx.strokeStyle = '#000000'
+        } else {
+          ctx.globalCompositeOperation = 'source-over'
+          ctx.strokeStyle = stroke.color
+        }
+        ctx.lineWidth = stroke.thickness
+        ctx.lineCap = 'round'
+        ctx.lineJoin = 'round'
+        ctx.stroke()
+      })
+      ctx.globalCompositeOperation = 'source-over'
+    }
+
+    function resizeCanvas() {
+      const canvas = document.getElementById('wb-canvas')
+      const container = document.getElementById('wb-wrap')
+      const rect = container.getBoundingClientRect()
+      if (rect.width === 0 || rect.height === 0) return
+      const dpr = window.devicePixelRatio || 1
+      canvas.width = rect.width * dpr
+      canvas.height = rect.height * dpr
+      canvas.style.width = `${rect.width}px`
+      canvas.style.height = `${rect.height}px`
+      const ctx = canvas.getContext('2d')
+      ctx.setTransform(1, 0, 0, 1, 0, 0)
+      ctx.scale(dpr, dpr)
+      ctx.lineCap = 'round'
+      ctx.lineJoin = 'round'
+      redrawCanvas()
+    }
+
+    function updateCursorVisibility(tool) {
+      const cursor = document.getElementById('wb-cursor')
+      const canvas = document.getElementById('wb-canvas')
+      if (tool === 'eraser') {
+        const size = getThicknessPx(thicknessLevel)
+        cursor.style.width = `${size}px`
+        cursor.style.height = `${size}px`
+        cursor.style.display = 'block'
+        canvas.style.cursor = 'none'
+      } else {
+        cursor.style.display = 'none'
+        canvas.style.cursor = 'crosshair'
+      }
+    }
+
+    function getCoords(e) {
+      const canvas = document.getElementById('wb-canvas')
+      const rect = canvas.getBoundingClientRect()
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY
+      return { x: clientX - rect.left, y: clientY - rect.top }
+    }
+
+    function eraseAtPoint(x, y) {
+      const eraserRadius = getThicknessPx(thicknessLevel) / 2
+      let hit = false
+      strokes = strokes.filter((stroke) => {
+        if (stroke.tool === 'eraser') return true
+        const padding = eraserRadius + stroke.thickness / 2
+        if (
+          x < stroke.minX - padding ||
+          x > stroke.maxX + padding ||
+          y < stroke.minY - padding ||
+          y > stroke.maxY + padding
+        ) {
+          return true
+        }
+        for (let i = 0; i < stroke.points.length - 1; i++) {
+          if (distanceToSegment({ x, y }, stroke.points[i], stroke.points[i + 1]) <= padding) {
+            hit = true
+            return false
+          }
+        }
+        return true
+      })
+      if (hit) redrawCanvas()
+    }
+
+    function startDrawing(e) {
+      const canvas = document.getElementById('wb-canvas')
+      const ctx = canvas.getContext('2d')
+      if ('button' in e && e.button === 2) e.preventDefault()
+      const isRightClick = 'button' in e && e.button === 2
+      isErasingMode = isRightClick
+      isDrawing = true
+      const { x, y } = getCoords(e)
+
+      if (!isErasingMode) {
+        currentStroke = {
+          id: Math.random().toString(36).slice(2, 9),
+          points: [{ x, y }],
+          tool: activeTool,
+          color: activeTool === 'eraser' ? 'transparent' : getDisplayColor(),
+          thickness: getThicknessPx(thicknessLevel),
+          minX: x,
+          maxX: x,
+          minY: y,
+          maxY: y
+        }
+        ctx.beginPath()
+        ctx.moveTo(x, y)
+        if (activeTool === 'eraser') {
+          ctx.globalCompositeOperation = 'destination-out'
+          ctx.strokeStyle = '#000000'
+        } else {
+          ctx.globalCompositeOperation = 'source-over'
+          ctx.strokeStyle = getDisplayColor()
+        }
+        ctx.lineWidth = getThicknessPx(thicknessLevel)
+        ctx.lineCap = 'round'
+        ctx.lineJoin = 'round'
+      } else {
+        lastEraserPos = { x, y }
+        eraseAtPoint(x, y)
+        canvas.style.cursor = 'none'
+      }
+
+      if (!e.touches) {
+        updateCursorVisibility(isRightClick ? 'eraser' : activeTool)
+        const cursor = document.getElementById('wb-cursor')
+        cursor.style.left = `${x}px`
+        cursor.style.top = `${y}px`
+      }
+    }
+
+    function draw(e) {
+      if (!isDrawing) return
+      if (e.cancelable) e.preventDefault()
+      const canvas = document.getElementById('wb-canvas')
+      const ctx = canvas.getContext('2d')
+      const { x, y } = getCoords(e)
+
+      if (!isErasingMode) {
+        if (currentStroke) {
+          currentStroke.points.push({ x, y })
+          currentStroke.minX = Math.min(currentStroke.minX, x)
+          currentStroke.maxX = Math.max(currentStroke.maxX, x)
+          currentStroke.minY = Math.min(currentStroke.minY, y)
+          currentStroke.maxY = Math.max(currentStroke.maxY, y)
+          ctx.lineTo(x, y)
+          ctx.stroke()
+        }
+      } else {
+        const lastPos = lastEraserPos
+        if (lastPos) {
+          const dist = Math.hypot(x - lastPos.x, y - lastPos.y)
+          const step = 8
+          if (dist > step) {
+            const steps = Math.floor(dist / step)
+            for (let i = 1; i <= steps; i++) {
+              const tv = i / steps
+              eraseAtPoint(lastPos.x + (x - lastPos.x) * tv, lastPos.y + (y - lastPos.y) * tv)
+            }
+          } else {
+            eraseAtPoint(x, y)
+          }
+        } else {
+          eraseAtPoint(x, y)
+        }
+        lastEraserPos = { x, y }
+      }
+    }
+
+    function stopDrawing() {
+      isDrawing = false
+      if (currentStroke) {
+        strokes.push(currentStroke)
+        currentStroke = null
+      }
+      isErasingMode = false
+      lastEraserPos = null
+      updateCursorVisibility(activeTool)
+    }
+
+    function renderToolbar() {
+      const toolbar = document.getElementById('wb-toolbar')
+      const penActive = activeTool === 'pen'
+      const eraserActive = activeTool === 'eraser'
+      const displayColor = getDisplayColor()
+
+      toolbar.innerHTML = `
+        <div class="wb-tool-group">
+          <div class="wb-tool ${penActive ? 'active' : ''}" data-wb-tool="pen">
+            <div style="width:24px;height:24px;background:#E8C39E;clip-path:polygon(50% 0%,100% 100%,0% 100%);position:relative">
+              <div style="position:absolute;top:0;left:8px;width:8px;height:8px;background:${displayColor};clip-path:polygon(50% 0%,100% 100%,0% 100%)"></div>
+            </div>
+            <div style="width:24px;height:66px;background:#2C2C2E;border-radius:0 0 4px 4px;box-shadow:inset 3px 0 3px rgba(255,255,255,0.05),inset -3px 0 3px rgba(0,0,0,0.4),0 4px 8px rgba(0,0,0,0.2);display:flex;flex-direction:column;align-items:center;position:relative">
+              <div style="width:100%;height:6px;background:${displayColor};margin-top:4px"></div>
+              <span style="font-size:7px;color:#8E8E93;font-weight:800;transform:rotate(-90deg);white-space:nowrap;margin-top:24px;letter-spacing:0.1em">PENCIL</span>
+            </div>
+          </div>
+          <div class="wb-tool ${eraserActive ? 'active' : ''}" data-wb-tool="eraser">
+            <div style="width:24px;height:28px;background:#FF8A9A;border-radius:4px 4px 0 0;border-bottom:2px solid #E15B70;box-shadow:inset 3px 3px 3px rgba(255,255,255,0.3),inset -3px -3px 3px rgba(0,0,0,0.1)"></div>
+            <div style="width:24px;height:62px;background:#F2F2F7;border-radius:0 0 4px 4px;box-shadow:inset 3px 0 3px rgba(255,255,255,0.5),inset -3px 0 3px rgba(0,0,0,0.15),0 4px 8px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;position:relative">
+              <div style="width:100%;height:4px;background:#3B82F6;position:absolute;top:8px"></div>
+              <span style="font-size:7px;color:#8E8E93;font-weight:800;transform:rotate(-90deg);white-space:nowrap;letter-spacing:0.1em">ERASER</span>
+            </div>
+          </div>
+        </div>
+        <div class="wb-thickness-group">
+          ${['thin', 'medium', 'thick']
+            .map((level) => {
+              const selected = thicknessLevel === level
+              const dot = level === 'thin' ? 4 : level === 'medium' ? 8 : 14
+              const px = getThicknessPx(level)
+              return `<button type="button" data-wb-thickness="${level}" style="width:36px;height:48px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;background:${selected ? 'rgba(0,0,0,0.04)' : 'transparent'};border:none;cursor:pointer;padding:4px 0;border-radius:6px"><div style="flex:1;display:flex;align-items:center;justify-content:center;height:24px"><div style="width:${dot}px;height:${dot}px;border-radius:50%;background:${selected ? displayColor : '#8E8E93'}"></div></div><span style="font-size:9px;font-weight:${selected ? 800 : 500};color:${selected ? '#1C1C1E' : '#8E8E93'}">${px}px</span></button>`
+            })
+            .join('')}
+        </div>
+        <div class="wb-color-group">
+          ${colors
+            .map((color) => {
+              const selected = selectedColor === color.value
+              const colorVal = color.value.startsWith('var(') ? displayColor : color.value
+              return `<div data-wb-color="${color.value}" title="${color.name}" style="width:28px;height:28px;border-radius:50%;background:#EAEAEA;box-shadow:inset 0 2px 4px rgba(0,0,0,0.15);display:flex;align-items:center;justify-content:center;cursor:pointer;transform:scale(${selected ? 1.15 : 1})"><div style="width:20px;height:20px;border-radius:50%;background:${colorVal};display:flex;align-items:center;justify-content:center">${selected ? '<svg viewBox="0 0 24 24" style="width:10px;height:10px;stroke:#fff;stroke-width:4;fill:none"><polyline points="20 6 9 17 4 12"/></svg>' : ''}</div></div>`
+            })
+            .join('')}
+        </div>
+        <div style="height:100%;display:flex;align-items:center;padding-bottom:8px">
+          <button type="button" id="wb-clear-btn" style="background:${confirmClear ? '#EF4444' : 'rgba(0,0,0,0.04)'};border:${confirmClear ? 'none' : '1px solid rgba(0,0,0,0.06)'};color:${confirmClear ? '#fff' : '#EF4444'};cursor:pointer;padding:8px 16px;border-radius:20px;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700">
+            <svg style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.5" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            <span>${confirmClear ? t('confirmClear', state.uiLanguage) : t('deleteAll', state.uiLanguage)}</span>
+          </button>
+        </div>
+      `
+    }
+
+    function renderGuide() {
+      const guide = document.getElementById('wb-guide')
+      guide.textContent = t('whiteboardGuide', state.uiLanguage)
+    }
+
+    function onActivate() {
+      resizeCanvas()
+      const guide = document.getElementById('wb-guide')
+      guide.style.opacity = '1'
+      guide.style.transform = 'translateX(-50%) translateY(0)'
+      clearTimeout(guideTimer)
+      guideTimer = setTimeout(() => {
+        guide.style.opacity = '0'
+        guide.style.transform = 'translateX(-50%) translateY(12px)'
+      }, 4500)
+      renderToolbar()
+      updateCursorVisibility(activeTool)
+    }
+
+    function init() {
+      const canvas = document.getElementById('wb-canvas')
+      canvas.addEventListener('mousedown', startDrawing)
+      canvas.addEventListener('mousemove', (e) => {
+        const cursor = document.getElementById('wb-cursor')
+        const { x, y } = getCoords(e)
+        cursor.style.left = `${x}px`
+        cursor.style.top = `${y}px`
+        draw(e)
+      })
+      canvas.addEventListener('mouseup', stopDrawing)
+      canvas.addEventListener('mouseleave', () => {
+        document.getElementById('wb-cursor').style.display = 'none'
+        stopDrawing()
+      })
+      canvas.addEventListener('mouseenter', () => updateCursorVisibility(activeTool))
+      canvas.addEventListener('contextmenu', (e) => e.preventDefault())
+      canvas.addEventListener('touchstart', startDrawing, { passive: false })
+      canvas.addEventListener('touchmove', draw, { passive: false })
+      canvas.addEventListener('touchend', stopDrawing)
+      window.addEventListener('resize', () => {
+        if (state.currentPage === 'whiteboard') resizeCanvas()
+      })
+
+      document.getElementById('wb-toolbar').addEventListener('click', (e) => {
+        const tool = e.target.closest('[data-wb-tool]')
+        if (tool) {
+          activeTool = tool.dataset.wbTool
+          renderToolbar()
+          updateCursorVisibility(activeTool)
+          return
+        }
+        const thickness = e.target.closest('[data-wb-thickness]')
+        if (thickness) {
+          thicknessLevel = thickness.dataset.wbThickness
+          renderToolbar()
+          updateCursorVisibility(activeTool)
+          return
+        }
+        const color = e.target.closest('[data-wb-color]')
+        if (color) {
+          selectedColor = color.dataset.wbColor
+          renderToolbar()
+          return
+        }
+        if (e.target.closest('#wb-clear-btn')) {
+          if (confirmClear) {
+            strokes = []
+            redrawCanvas()
+            confirmClear = false
+          } else {
+            confirmClear = true
+            clearTimeout(confirmTimer)
+            confirmTimer = setTimeout(() => {
+              confirmClear = false
+              renderToolbar()
+            }, 3500)
+          }
+          renderToolbar()
+        }
+      })
+
+      renderToolbar()
+      renderGuide()
+    }
+
+    return { init, onActivate, renderToolbar, renderGuide }
+  })()
+
+  function renderWhiteboardChrome() {
+    whiteboard.renderToolbar()
+    whiteboard.renderGuide()
+  }
+
+  // ── Modals ──
+  function renderHelpModal() {
+    const panel = document.getElementById('help-panel')
+    const sections = [
+      ['Lessons', 'helpLessons'],
+      [t('whiteboard', state.uiLanguage), 'helpWhiteboard'],
+      [t('history', state.uiLanguage), 'helpHistory'],
+      [t('cards', state.uiLanguage), 'helpCards']
+    ]
+    panel.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h2 class="headline-lg" style="font-size:24px;line-height:1">${t('helpTitle', state.uiLanguage)}</h2>
+        <button class="btn-icon" type="button" data-close-modal="help" style="width:32px;height:32px">✕</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        ${sections
+          .map(
+            ([title, key]) =>
+              `<div><h3 class="label-lg" style="color:var(--primary);margin-bottom:4px">${title}</h3><p class="body-lg" style="opacity:0.8;line-height:1.5">${t(key, state.uiLanguage)}</p></div>`
+          )
+          .join('')}
+        <hr style="border:0;border-top:1px dashed var(--border-light);margin:8px 0" />
+        <div style="background:var(--surface);padding:12px 16px;border-radius:12px">
+          <h4 class="label-lg" style="margin-bottom:6px;font-size:13px">⌨️ ${t('helpHotkeysTitle', state.uiLanguage)}</h4>
+          <p style="opacity:0.7;line-height:1.6;font-size:12px;white-space:pre-line">${t('helpHotkeys', state.uiLanguage)}</p>
+        </div>
+      </div>
+    `
+  }
+
+  function renderSettingsModal() {
+    const panel = document.getElementById('settings-panel')
+    panel.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border-light);padding-bottom:16px">
+        <h1 class="headline-lg" style="font-size:26px;margin:0">${t('settings', state.uiLanguage)}</h1>
+        <button class="btn-icon" type="button" data-close-modal="settings" style="width:32px;height:32px">✕</button>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;gap:16px;border-radius:var(--radius-lg)">
+        <p class="label-lg" style="font-size:12px;color:var(--primary);letter-spacing:0.05em">${t('languageSettings', state.uiLanguage)}</p>
+        ${[
+          { id: 'ko', label: '한국어 (Korean)' },
+          { id: 'en', label: 'English (영어)' },
+          { id: 'ja', label: '日本語 (일본어)' }
+        ]
+          .map(
+            (lang) =>
+              `<label class="lang-option"><input type="radio" name="language" value="${lang.id}" ${state.uiLanguage === lang.id ? 'checked' : ''} /><span style="font-size:15px;font-weight:600">${lang.label}</span></label>`
+          )
+          .join('')}
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;gap:16px;border-radius:var(--radius-lg)">
+        <p class="label-lg" style="font-size:12px;color:var(--primary);letter-spacing:0.05em">${t('themeSettings', state.uiLanguage)}</p>
+        <p style="font-size:13px;opacity:0.6;margin-top:-8px">${t('themeColorLabel', state.uiLanguage)}</p>
+        <div class="color-preset-grid">
+          ${COLOR_PRESETS.map(
+            (preset) =>
+              `<button type="button" class="color-preset-btn ${state.themeColor === preset.color ? 'active' : ''}" data-theme-color="${preset.color}" data-theme-container="${preset.containerColor}"><div class="color-swatch" style="background:${preset.color}"></div><span style="font-size:11px;font-weight:700">${preset.name}</span></button>`
+          ).join('')}
+        </div>
+      </div>
+      <button class="btn-secondary" type="button" data-close-modal="settings" style="height:48px;font-size:15px;font-weight:700;border-radius:var(--radius-md);width:100%">${t('close', state.uiLanguage)}</button>
+    `
+  }
+
+  function openModal(id) {
+    document.getElementById(`${id}-modal`).classList.remove('hidden')
+    if (id === 'help') renderHelpModal()
+    if (id === 'settings') renderSettingsModal()
+  }
+
+  function closeModal(id) {
+    document.getElementById(`${id}-modal`).classList.add('hidden')
+  }
+
+  // ── Events ──
+  function bindEvents() {
+    document.getElementById('nav-tabs').addEventListener('click', (e) => {
+      const tab = e.target.closest('[data-page]')
+      if (!tab) return
+      e.preventDefault()
+      setPage(tab.dataset.page)
+    })
+
+    document.getElementById('btn-draw').addEventListener('click', drawCharacter)
+    document.getElementById('btn-help').addEventListener('click', () => openModal('help'))
+    document.getElementById('btn-settings').addEventListener('click', () => openModal('settings'))
+
+    document.getElementById('script-type-control').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-script]')
+      if (!btn) return
+      state.scriptType = btn.dataset.script
+      saveConfig()
+      renderSidebarControls()
+      drawCharacter()
+    })
+
+    document.getElementById('range-toggles').addEventListener('change', (e) => {
+      const key = e.target.dataset.toggle
+      if (!key) return
+      state[key] = e.target.checked
+      saveConfig()
+      drawCharacter()
+    })
+
+    document.getElementById('display-toggles').addEventListener('change', (e) => {
+      const key = e.target.dataset.toggle
+      if (!key) return
+      state[key] = e.target.checked
+      saveConfig()
+      if (key === 'showRomaji') renderLessonsCanvas()
+      else drawCharacter()
+    })
+
+    document.getElementById('btn-clear-history').addEventListener('click', () => {
+      if (confirm(t('clearHistoryConfirm', state.uiLanguage))) {
+        state.history = []
+        renderHistory()
+        renderRecentTray()
+      }
+    })
+
+    document.getElementById('history-list').addEventListener('click', (e) => {
+      const card = e.target.closest('[data-history-idx]')
+      if (!card) return
+      const entry = state.history[Number(card.dataset.historyIdx)]
+      if (!entry) return
+      state.character = { char: entry.char, romaji: entry.romaji, type: entry.type }
+      state.errorMessage = null
+      clearPracticeCanvas()
+      renderLessonsCanvas()
+      setPage('lessons')
+    })
+
+    document.getElementById('cards-script-tabs').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-cards-script]')
+      if (!btn) return
+      state.cardsScriptType = btn.dataset.cardsScript
+      renderCards()
+    })
+
+    document.getElementById('cards-sections').addEventListener('click', (e) => {
+      const card = e.target.closest('[data-card-char]')
+      if (!card) return
+      state.cardsSelected = {
+        char: card.dataset.cardChar,
+        romaji: card.dataset.cardRomaji,
+        type: card.dataset.cardType
+      }
+      const displayChar =
+        state.cardsScriptType === 'katakana'
+          ? toKatakana(state.cardsSelected.char)
+          : state.cardsSelected.char
+      state.character = {
+        char: displayChar,
+        romaji: state.cardsSelected.romaji,
+        type: state.cardsSelected.type
+      }
+      state.errorMessage = null
+      clearPracticeCanvas()
+      renderLessonsCanvas()
+      renderCards()
+      setPage('lessons')
+    })
+
+    ;['help', 'settings'].forEach((id) => {
+      document.getElementById(`${id}-modal`).addEventListener('click', (e) => {
+        if (e.target.id === `${id}-modal` || e.target.closest(`[data-close-modal="${id}"]`)) {
+          closeModal(id)
+        }
+      })
+    })
+
+    document.getElementById('settings-panel').addEventListener('change', (e) => {
+      if (e.target.name === 'language') {
+        state.uiLanguage = e.target.value
+        saveConfig()
+        applyI18n()
+        renderSettingsModal()
+      }
+    })
+
+    document.getElementById('settings-panel').addEventListener('click', (e) => {
+      const preset = e.target.closest('[data-theme-color]')
+      if (!preset) return
+      state.themeColor = preset.dataset.themeColor
+      state.themeColorContainer = preset.dataset.themeContainer
+      applyTheme()
+      saveConfig()
+      renderSettingsModal()
+      renderWhiteboardChrome()
+    })
+
+    window.addEventListener('keydown', (e) => {
+      const activeEl = document.activeElement
+      if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) return
+      if (state.currentPage !== 'lessons') return
+      if (e.code === 'Space') {
+        e.preventDefault()
+        drawCharacter()
+      }
+      if (e.key === 'r' || e.key === 'R') drawCharacter()
+    })
+  }
+
+  // ── Boot ──
+  function init() {
+    loadConfig()
+    applyTheme()
+    bindEvents()
+    initPracticeCanvas()
+    whiteboard.init()
+    applyI18n()
+    drawCharacter()
+  }
+
+  document.addEventListener('DOMContentLoaded', init)
+})()
+
+    </script>
+  </body>
+</html>
